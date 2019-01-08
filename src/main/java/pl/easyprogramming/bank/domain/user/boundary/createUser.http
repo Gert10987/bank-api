@@ -1,0 +1,40 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+
+POST http://localhost:8080/users/register
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Carss",
+    "email": "Adamdsadsa112@test.com",
+    "password": "12345678",
+    "amountMoney": "10,000",
+    "currency": "PLN"
+}
+###
+
+PUT http://localhost:8080/account/11/charge
+authorization: Bearer JhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZGFtZHNhZHNhMTEyQHRlc3QuY29tIiwiaWF0IjoxNTQ2OTczNTk3LCJpZCI6ImQ3ZWU2YjI0LThjMGQtNDczZC1hOTczLTYxNjgxMWE0ZTJjZSJ9.VIpJIE3GJ9wlEPlLvYguE9O3KzArQqPyGnMhCRz1IYI
+###
+
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+    "email": "Adamdsadsa112@test.com",
+    "password": "12345678"
+
+}
+
+###
+
+DELETE http://localhost:8080/users/logout?uuid=bbc41727-ffa8-410f-be5b-1cc3d5e3f9f2
+
+###
+
