@@ -11,4 +11,12 @@ public final class Money implements Serializable {
         this.amount = amount;
         this.currency = currency;
     }
+
+    public String amount() {
+        return amount;
+    }
+
+    public String currency() {
+        return currency;
+    }
 }

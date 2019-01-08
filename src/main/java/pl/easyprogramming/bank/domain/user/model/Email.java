@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 public final class Email implements Serializable {
 
+    private static final long serialVersionUID = 3089334206779236478L;
+
     private String emailValue;
     private String name;
     private String organization;

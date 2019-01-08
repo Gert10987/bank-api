@@ -31,7 +31,7 @@ public class User {
 
         this.email = registrationData.email().emailValue();
         this.password = registrationData.password().passwordValue();
-        this.registrationDateTime = LocalDateTime.now();
+        this.registrationDateTime = registrationData.registeredDate().registeredAt();
     }
 
     public String password() {

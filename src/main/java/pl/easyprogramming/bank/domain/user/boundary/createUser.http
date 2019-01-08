@@ -12,7 +12,7 @@ Content-Type: application/json
 {
     "firstName": "John",
     "lastName": "Carss",
-    "email": "Adamdsadsa112@test.com",
+    "email": "Adamd3sadsa11254@test.com",
     "password": "12345678",
     "amountMoney": "10,000",
     "currency": "PLN"

@@ -4,12 +4,14 @@ import pl.easyprogramming.bank.domain.account.model.Money;
 import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public final class RegistrationData implements Serializable {
 
     private Name name;
     private Email email;
     private Money money;
+    private RegisterDate registeredDate;
 
     private transient Password password;
 
@@ -19,6 +21,8 @@ public final class RegistrationData implements Serializable {
         this.email = new Email(registrationDataDTO.email());
         this.password = new Password(registrationDataDTO.password());
         this.money = new Money(registrationDataDTO.getAmountMoney(), registrationDataDTO.getCurrency());
+
+        this.registeredDate = new RegisterDate(LocalDateTime.now());
     }
 
     public Email email() {
@@ -29,11 +33,15 @@ public final class RegistrationData implements Serializable {
         return password;
     }
 
-    public Name getName() {
+    public Name name() {
         return name;
     }
 
-    public Money getMoney() {
+    public Money money() {
         return money;
+    }
+
+    public RegisterDate registeredDate() {
+        return registeredDate;
     }
 }
