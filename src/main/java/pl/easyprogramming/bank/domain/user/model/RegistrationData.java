@@ -4,6 +4,7 @@ import pl.easyprogramming.bank.domain.account.model.Money;
 import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public final class RegistrationData implements Serializable {
@@ -20,7 +21,7 @@ public final class RegistrationData implements Serializable {
         this.name = new Name(registrationDataDTO.getFirstName(), registrationDataDTO.getLastName());
         this.email = new Email(registrationDataDTO.email());
         this.password = new Password(registrationDataDTO.password());
-        this.money = new Money(registrationDataDTO.getAmountMoney(), registrationDataDTO.getCurrency());
+        this.money = new Money(new BigDecimal(registrationDataDTO.getAmountMoney()), registrationDataDTO.getCurrency());
 
         this.registeredDate = new RegisterDate(LocalDateTime.now());
     }

@@ -14,22 +14,28 @@ Content-Type: application/json
     "lastName": "Carss",
     "email": "Adamd3sadsa11254@test.com",
     "password": "12345678",
-    "amountMoney": "10,000",
+    "amountMoney": "10000",
     "currency": "PLN"
 }
 ###
 
-PUT http://localhost:8080/account/11/charge
-authorization: Bearer JhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZGFtZHNhZHNhMTEyQHRlc3QuY29tIiwiaWF0IjoxNTQ2OTczNTk3LCJpZCI6ImQ3ZWU2YjI0LThjMGQtNDczZC1hOTczLTYxNjgxMWE0ZTJjZSJ9.VIpJIE3GJ9wlEPlLvYguE9O3KzArQqPyGnMhCRz1IYI
+PUT http://localhost:8080/account/1/charge
+authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZGFtZDNzYWRzYTExMjU0QHRlc3QuY29tIiwiaWF0IjoxNTQ2OTg0NzA3LCJpZCI6ImNjYzFmZTI0LTYxYzgtNDQ4MS05YTkzLWM1MjIyZjczM2Q4MiJ9.EoAozyfk3T_GSQ3jEwUtI55WyoMfFwlUTmyZt71havQ
+Content-Type: application/json
+
+{
+    "amount": "90",
+    "currency": "PLN"
+}
+
 ###
 
 POST http://localhost:8080/users/login
 Content-Type: application/json
 
 {
-    "email": "Adamdsadsa112@test.com",
+    "email": "Adamd3sadsa11254@test.com",
     "password": "12345678"
-
 }
 
 ###

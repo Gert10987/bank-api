@@ -18,6 +18,8 @@ public class Identity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private Identity() { }
+
     public Identity(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;

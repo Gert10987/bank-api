@@ -6,4 +6,5 @@ import pl.easyprogramming.bank.domain.account.repository.entity.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+
 }

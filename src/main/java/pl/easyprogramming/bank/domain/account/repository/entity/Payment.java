@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-public class Money {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +15,11 @@ public class Money {
 
     @Column
     private String currency;
+
+    private Payment() { }
+
+    public Payment(pl.easyprogramming.bank.domain.account.model.Money money) {
+        this.amount = money.amount();
+        this.currency = money.currency();
+    }
 }

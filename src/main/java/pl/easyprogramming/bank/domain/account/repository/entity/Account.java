@@ -1,5 +1,6 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
+import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.persistence.*;
@@ -15,6 +16,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, length = 26, updatable = false)
+    private String accountNumber;
+
     @Column
     private LocalDateTime registeredDateTime;
 
@@ -27,18 +31,30 @@ public class Account {
     @OneToOne(cascade = CascadeType.ALL)
     private Identity identity;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
-    private Set<Money> amountOfEachCurrencies = new HashSet<>();
+    private Set<Payment> payments = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     private Set<Address> addresses = new HashSet<>();
 
-    public Account(RegistrationData registrationData) {
+    private Account() { }
+
+    public Account(RegistrationData registrationData, AccountNumber accountNumber) {
 
         this.registeredDateTime = registrationData.registeredDate().registeredAt();
         this.defualtCurrency = registrationData.money().currency();
+
+        this.accountNumber = accountNumber.accountNumber();
+    }
+
+    public BigDecimal totalMoney() {
+        return totalMoney;
+    }
+
+    public void chargeTotalMoney(BigDecimal totalMoney){
+        this.totalMoney = totalMoney;
     }
 
     public void withIdentity(Identity identity) {
@@ -47,5 +63,16 @@ public class Account {
 
     public void addAddress(Address address){
         this.addresses.add(address);
+    }
+
+    public boolean isActive() {
+        return this.totalMoney != null;
+    }
+
+    public void addPayment(pl.easyprogramming.bank.domain.account.model.Money money){
+
+        Payment paymentEntity = new Payment(money);
+
+        payments.add(paymentEntity);
     }
 }
