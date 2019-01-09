@@ -1,6 +1,6 @@
 package pl.easyprogramming.bank.domain.account.model;
 
-import pl.easyprogramming.bank.domain.user.model.Email;
+import pl.easyprogramming.bank.domain.common.model.Email;
 
 import java.io.Serializable;
 

@@ -2,6 +2,7 @@ package pl.easyprogramming.bank.domain.account.repository.entity;
 
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.PaymantType;
+import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.persistence.*;
@@ -79,7 +80,7 @@ public class Account {
         return defualtCurrency;
     }
 
-    public void addPaymant(pl.easyprogramming.bank.domain.account.model.Money money, PaymantType type){
+    public void addPaymant(Money money, PaymantType type){
 
         Payment paymentEntity = new Payment(money, type);
 

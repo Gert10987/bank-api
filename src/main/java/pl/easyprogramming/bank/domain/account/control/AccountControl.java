@@ -11,6 +11,7 @@ import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
 import pl.easyprogramming.bank.domain.account.repository.entity.Account;
 import pl.easyprogramming.bank.domain.account.repository.entity.Address;
 import pl.easyprogramming.bank.domain.account.repository.entity.Identity;
+import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.jms.Queue;

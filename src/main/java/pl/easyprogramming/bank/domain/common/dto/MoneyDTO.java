@@ -1,4 +1,4 @@
-package pl.easyprogramming.bank.domain.account.dto;
+package pl.easyprogramming.bank.domain.common.dto;
 
 public class MoneyDTO {
 

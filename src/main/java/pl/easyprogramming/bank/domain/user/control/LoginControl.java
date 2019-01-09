@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.easyprogramming.bank.domain.user.model.Email;
+import pl.easyprogramming.bank.domain.common.model.Email;
 import pl.easyprogramming.bank.domain.user.model.Password;
 import pl.easyprogramming.bank.domain.user.model.login.LoginService;
 import pl.easyprogramming.bank.domain.user.repository.ExpireTokenRepository;

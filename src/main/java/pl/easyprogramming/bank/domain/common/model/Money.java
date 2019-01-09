@@ -1,6 +1,6 @@
-package pl.easyprogramming.bank.domain.account.model;
+package pl.easyprogramming.bank.domain.common.model;
 
-import pl.easyprogramming.bank.domain.account.dto.MoneyDTO;
+import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

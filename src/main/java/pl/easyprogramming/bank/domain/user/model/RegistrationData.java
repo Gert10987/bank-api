@@ -1,6 +1,8 @@
 package pl.easyprogramming.bank.domain.user.model;
 
-import pl.easyprogramming.bank.domain.account.model.Money;
+import pl.easyprogramming.bank.domain.common.model.Money;
+import pl.easyprogramming.bank.domain.common.model.Email;
+import pl.easyprogramming.bank.domain.common.model.Name;
 import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
 
 import java.io.Serializable;

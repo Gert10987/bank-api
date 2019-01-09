@@ -1,4 +1,4 @@
-package pl.easyprogramming.bank.domain.user.model;
+package pl.easyprogramming.bank.domain.common.model;
 
 import javax.validation.ValidationException;
 import java.io.Serializable;

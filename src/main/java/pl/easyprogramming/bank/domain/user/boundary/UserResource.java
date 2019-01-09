@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.easyprogramming.bank.domain.user.dto.LoginDataDTO;
 import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
-import pl.easyprogramming.bank.domain.user.model.Email;
+import pl.easyprogramming.bank.domain.common.model.Email;
 import pl.easyprogramming.bank.domain.user.model.Password;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 import pl.easyprogramming.bank.domain.user.model.login.LoginService;

@@ -1,5 +1,6 @@
 package pl.easyprogramming.bank.domain.account.model;
 
+import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 public interface AccountService {

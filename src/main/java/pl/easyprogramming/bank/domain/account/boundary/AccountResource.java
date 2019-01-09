@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.easyprogramming.bank.domain.account.dto.MoneyDTO;
+import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
 import pl.easyprogramming.bank.domain.account.model.AccountIdentity;
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.AccountService;
-import pl.easyprogramming.bank.domain.account.model.Money;
+import pl.easyprogramming.bank.domain.common.model.Money;
 
 @RestController
 @RequestMapping("account")

@@ -2,6 +2,7 @@ package pl.easyprogramming.bank.domain.account.repository.entity;
 
 import pl.easyprogramming.bank.domain.account.model.PaymantType;
 import pl.easyprogramming.bank.domain.account.repository.converter.PaymantStatusConverter;
+import pl.easyprogramming.bank.domain.common.model.Money;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -25,7 +26,7 @@ public class Payment {
 
     private Payment() { }
 
-    public Payment(pl.easyprogramming.bank.domain.account.model.Money money, PaymantType paymantType) {
+    public Payment(Money money, PaymantType paymantType) {
 
         this.paymantType = paymantType;
 
