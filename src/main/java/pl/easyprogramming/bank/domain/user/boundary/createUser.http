@@ -12,7 +12,7 @@ Content-Type: application/json
 {
     "firstName": "Greg",
     "lastName": "KER",
-    "email": "Adamd3sadsa112514@test.com",
+    "email": "Aaamd3sadsa1125114@test.com",
     "password": "12345678",
     "amountMoney": "10000.11",
     "currency": "PLN"
@@ -24,13 +24,13 @@ authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZGFtZDNzYWRzYTExMjU0QHRlc
 Content-Type: application/json
 
 {
-    "amount": "444.99",
+    "amount": "10.99",
     "currency": "PLN"
 }
 
 ###
 
-PUT http://localhost:8080/account/1/transfer/87375910546033345082155923/charge
+PUT http://localhost:8080/account/1/transfer/57836297789354525850468666/charge
 authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZGFtZDNzYWRzYTExMjU0QHRlc3QuY29tIiwiaWF0IjoxNTQ2OTg0NzA3LCJpZCI6ImNjYzFmZTI0LTYxYzgtNDQ4MS05YTkzLWM1MjIyZjczM2Q4MiJ9.EoAozyfk3T_GSQ3jEwUtI55WyoMfFwlUTmyZt71havQ
 Content-Type: application/json
 

@@ -1,5 +1,8 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
+import pl.easyprogramming.bank.domain.account.model.PaymantType;
+import pl.easyprogramming.bank.domain.account.repository.converter.PaymantStatusConverter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -16,10 +19,21 @@ public class Payment {
     @Column
     private String currency;
 
+    @Column
+    @Convert(converter = PaymantStatusConverter.class)
+    private PaymantType paymantType;
+
     private Payment() { }
 
-    public Payment(pl.easyprogramming.bank.domain.account.model.Money money) {
-        this.amount = money.amount();
+    public Payment(pl.easyprogramming.bank.domain.account.model.Money money, PaymantType paymantType) {
+
+        this.paymantType = paymantType;
+
         this.currency = money.currency();
+
+        if(paymantType.equals(PaymantType.WITHDRAWALS))
+            this.amount = money.amount().negate();
+        else
+            this.amount = money.amount();
     }
 }

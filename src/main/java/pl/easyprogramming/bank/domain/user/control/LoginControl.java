@@ -54,8 +54,16 @@ public class LoginControl implements LoginService {
             throw new AuthorizationServiceException("Invalid Password.");
         }
 
+        if(!user.isActive()){
+            throw new AuthorizationServiceException("Account is not active, please contact with support");
+        }
+
         String jwtToken = Jwts.builder().setSubject(emailValue).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, secret).claim("id", UUID.randomUUID()).compact();
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .claim("id", UUID.randomUUID())
+                .claim("account_id", user.accountId())
+                .claim("email", user.accountId())
+                .compact();
 
         user.lastLoggedAt(LocalDateTime.now());
 

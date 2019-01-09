@@ -21,6 +21,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private Long accountId;
+
     private LocalDateTime registrationDateTime;
     private LocalDateTime lastLoginDateTime;
 
@@ -38,7 +41,19 @@ public class User {
         return password;
     }
 
+    public boolean isActive() {
+        return this.accountId != null;
+    }
+
+    public boolean accountId() {
+        return this.accountId != null;
+    }
+
     public void lastLoggedAt(LocalDateTime lastLoginDateTime) {
         this.lastLoginDateTime = lastLoginDateTime;
+    }
+
+    public void assignAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 }

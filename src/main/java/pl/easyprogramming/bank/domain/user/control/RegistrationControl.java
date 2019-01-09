@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.easyprogramming.bank.domain.account.model.AccountIdentity;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 import pl.easyprogramming.bank.domain.user.model.registration.RegistrationService;
 import pl.easyprogramming.bank.domain.user.repository.UserRepository;
@@ -44,6 +45,13 @@ public class RegistrationControl implements RegistrationService {
         }
 
         return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @Override
+    public void assignAccountId(AccountIdentity accountIdentity) {
+
+        User user = userRepository.findByEmail(accountIdentity.email().emailValue());
+        user.assignAccountId(accountIdentity.id());
     }
 
     private void sendToQueueToCreateNewAccount(RegistrationData registrationData){

@@ -1,7 +1,7 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
-import pl.easyprogramming.bank.domain.account.model.Money;
+import pl.easyprogramming.bank.domain.account.model.PaymantType;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.persistence.*;
@@ -50,6 +50,10 @@ public class Account {
         this.accountNumber = accountNumber.accountNumber();
     }
 
+    public Long id(){
+        return id;
+    }
+
     public BigDecimal totalMoney() {
         return totalMoney;
     }
@@ -70,18 +74,13 @@ public class Account {
         return this.totalMoney != null;
     }
 
-    public void addWithdrawals(pl.easyprogramming.bank.domain.account.model.Money money){
-
-        Money negateMoney = new Money(money.amount().negate(), money.currency());
-
-        Payment paymentEntity = new Payment(negateMoney);
-
-        payments.add(paymentEntity);
+    public String defaultCurrency() {
+        return defualtCurrency;
     }
 
-    public void addDepositPaymant(pl.easyprogramming.bank.domain.account.model.Money money){
+    public void addPaymant(pl.easyprogramming.bank.domain.account.model.Money money, PaymantType type){
 
-        Payment paymentEntity = new Payment(money);
+        Payment paymentEntity = new Payment(money, type);
 
         payments.add(paymentEntity);
     }
