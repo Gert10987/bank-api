@@ -46,6 +46,7 @@ public class Account {
 
         this.registeredDateTime = registrationData.registeredDate().registeredAt();
         this.defualtCurrency = registrationData.money().currency();
+        this.totalMoney = registrationData.money().amount();
 
         this.accountNumber = accountNumber.accountNumber();
     }

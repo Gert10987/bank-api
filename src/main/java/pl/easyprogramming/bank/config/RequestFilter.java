@@ -1,17 +1,24 @@
 package pl.easyprogramming.bank.config;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import pl.easyprogramming.bank.domain.user.repository.ExpireTokenRepository;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class RequestFilter implements Filter {
 
+    @Value("${secret-key}")
     private String secret;
 
     private ExpireTokenRepository expireTokenRepository;
@@ -27,25 +34,51 @@ public class RequestFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+
+        String errorMessage = authorizeRequest(request, response);
+        if (errorMessage != null)
+            send401ErrorResponse(response, errorMessage);
+        else
+            chain.doFilter(req, res);
+    }
+
+    private String authorizeRequest(HttpServletRequest request, HttpServletResponse response) {
+
+        String errorMessage = null;
+
         String authHeader = request.getHeader("authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
-            throw new AuthorizationServiceException("Missing or invalid Authorization header");
+            errorMessage = "Missing or invalid Authorization header";
+        } else {
+            String token = authHeader.substring(7);
+            Claims claims = null;
+
+            try {
+                claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            } catch (RuntimeException e) {
+                errorMessage = "Invalid token";
+            }
+
+            if (errorMessage == null) {
+
+                UUID uuid = UUID.fromString(claims.get("id").toString());
+                String accountId = claims.get("account_id").toString();
+                LocalDateTime expTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.valueOf(claims.get("exp").toString())), TimeZone.getDefault().toZoneId());
+
+                //TODO Add authorization rules
+
+                if (expireTokenRepository.existsById(uuid)) {
+                    errorMessage = "Token expired";
+                }
+            }
         }
 
-        String token = authHeader.substring(7);
-        UUID uuid;
+        return errorMessage;
+    }
 
-        try {
-            uuid = UUID.fromString(Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().get("id").toString());
-        } catch (RuntimeException e) {
-            throw new AuthorizationServiceException("Invalid token");
-        }
-
-        if(expireTokenRepository.existsById(uuid)){
-            throw new AuthorizationServiceException("Token expired");
-        }
-
-        chain.doFilter(req, res);
+    private void send401ErrorResponse(HttpServletResponse response, String message) throws IOException {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
     }
 }

@@ -19,6 +19,7 @@ import pl.easyprogramming.bank.domain.user.repository.entity.ExpireToken;
 import pl.easyprogramming.bank.domain.user.repository.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -58,11 +59,14 @@ public class LoginControl implements LoginService {
             throw new AuthorizationServiceException("Account is not active, please contact with support");
         }
 
-        String jwtToken = Jwts.builder().setSubject(emailValue).setIssuedAt(new Date())
+        Date currentDate = new Date();
+
+        String jwtToken = Jwts.builder().setSubject(emailValue)
+                .setIssuedAt(currentDate)
                 .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(addMinutesToCurrentDate(30))
                 .claim("id", UUID.randomUUID())
                 .claim("account_id", user.accountId())
-                .claim("email", user.accountId())
                 .compact();
 
         user.lastLoggedAt(LocalDateTime.now());
@@ -75,5 +79,14 @@ public class LoginControl implements LoginService {
         expireTokenRepository.save(new ExpireToken(uuid));
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private Date addMinutesToCurrentDate(int minutesToAdd){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MINUTE, minutesToAdd);
+
+        return cal.getTime();
     }
 }

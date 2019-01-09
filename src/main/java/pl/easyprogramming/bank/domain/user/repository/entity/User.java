@@ -45,8 +45,8 @@ public class User {
         return this.accountId != null;
     }
 
-    public boolean accountId() {
-        return this.accountId != null;
+    public Long accountId() {
+        return accountId;
     }
 
     public void lastLoggedAt(LocalDateTime lastLoginDateTime) {
