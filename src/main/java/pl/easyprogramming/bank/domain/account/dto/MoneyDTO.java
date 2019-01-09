@@ -1,6 +1,6 @@
 package pl.easyprogramming.bank.domain.account.dto;
 
-public class ChargeDTO {
+public class MoneyDTO {
 
     private String amount;
     private String currency;

@@ -1,6 +1,6 @@
 package pl.easyprogramming.bank.domain.account.model;
 
-import pl.easyprogramming.bank.domain.account.dto.ChargeDTO;
+import pl.easyprogramming.bank.domain.account.dto.MoneyDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,13 +11,21 @@ public final class Money implements Serializable {
     private String currency;
 
     public Money(BigDecimal amount, String currency) {
-        this.amount = amount;
+        setAmount(amount);
         this.currency = currency;
     }
 
-    public Money(ChargeDTO chargeDTO) {
-        this.amount = new BigDecimal(chargeDTO.getAmount());
-        this.currency = chargeDTO.getCurrency();
+    public Money(MoneyDTO moneyDTO) {
+        this.amount = new BigDecimal(moneyDTO.getAmount());
+        this.currency = moneyDTO.getCurrency();
+    }
+
+    private void setAmount(BigDecimal amount) {
+
+        if(amount.compareTo(BigDecimal.ONE) <= 0)
+            throw new IllegalArgumentException("Amount of money should be more than 0");
+
+        this.amount = amount.setScale(2);
     }
 
     public BigDecimal amount() {

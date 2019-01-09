@@ -1,6 +1,7 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
+import pl.easyprogramming.bank.domain.account.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.persistence.*;
@@ -53,7 +54,7 @@ public class Account {
         return totalMoney;
     }
 
-    public void chargeTotalMoney(BigDecimal totalMoney){
+    public void updateTotalValueOfMoney(BigDecimal totalMoney){
         this.totalMoney = totalMoney;
     }
 
@@ -69,7 +70,16 @@ public class Account {
         return this.totalMoney != null;
     }
 
-    public void addPayment(pl.easyprogramming.bank.domain.account.model.Money money){
+    public void addWithdrawals(pl.easyprogramming.bank.domain.account.model.Money money){
+
+        Money negateMoney = new Money(money.amount().negate(), money.currency());
+
+        Payment paymentEntity = new Payment(negateMoney);
+
+        payments.add(paymentEntity);
+    }
+
+    public void addDepositPaymant(pl.easyprogramming.bank.domain.account.model.Money money){
 
         Payment paymentEntity = new Payment(money);
 
