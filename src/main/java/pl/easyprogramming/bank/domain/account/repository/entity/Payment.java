@@ -6,6 +6,7 @@ import pl.easyprogramming.bank.domain.common.model.Money;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 public class Payment {
@@ -24,6 +25,9 @@ public class Payment {
     @Convert(converter = PaymantStatusConverter.class)
     private PaymantType paymantType;
 
+    @Column
+    private LocalDateTime dateTime;
+
     private Payment() { }
 
     public Payment(Money money, PaymantType paymantType) {
@@ -36,5 +40,15 @@ public class Payment {
             this.amount = money.amount().negate();
         else
             this.amount = money.amount();
+
+        this.dateTime = LocalDateTime.now();
+    }
+
+    public BigDecimal amount() {
+        return amount;
+    }
+
+    public String currency() {
+        return currency;
     }
 }

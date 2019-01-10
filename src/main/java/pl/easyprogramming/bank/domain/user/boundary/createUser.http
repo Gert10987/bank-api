@@ -14,8 +14,10 @@ Content-Type: application/json
     "lastName": "KER",
     "email": "Aaamd3sadsa1125114@test.com",
     "password": "12345678",
-    "amountMoney": "10000.11",
-    "currency": "PLN"
+    "money": {
+        "amountMoney": "10000.11",
+        "currency": "PLN"
+    }
 }
 ###
 

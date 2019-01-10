@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 
 public final class RegistrationData implements Serializable {
 
+    private static final long serialVersionUID = -6058991309438826987L;
+
     private Name name;
     private Email email;
     private Money money;
@@ -23,7 +25,7 @@ public final class RegistrationData implements Serializable {
         this.name = new Name(registrationDataDTO.getFirstName(), registrationDataDTO.getLastName());
         this.email = new Email(registrationDataDTO.getEmail());
         this.password = new Password(registrationDataDTO.getPassword());
-        this.money = new Money(new BigDecimal(registrationDataDTO.getAmountMoney()), registrationDataDTO.getCurrency());
+        this.money = new Money(new BigDecimal(registrationDataDTO.getMoney().getAmount()), registrationDataDTO.getMoney().getCurrency());
 
         this.registeredDate = new RegisterDate(LocalDateTime.now());
     }

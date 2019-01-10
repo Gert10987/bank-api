@@ -1,12 +1,13 @@
 package pl.easyprogramming.bank.domain.user.dto;
 
+import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
+
 public class RegistrationDataDTO {
 
     private String firstName;
     private String lastName;
 
-    private String amountMoney;
-    private String currency;
+    private MoneyDTO money;
 
     private String email;
     private String password;
@@ -27,20 +28,12 @@ public class RegistrationDataDTO {
         this.lastName = lastName;
     }
 
-    public String getAmountMoney() {
-        return amountMoney;
+    public MoneyDTO getMoney() {
+        return money;
     }
 
-    public void setAmountMoney(String amountMoney) {
-        this.amountMoney = amountMoney;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setMoney(MoneyDTO money) {
+        this.money = money;
     }
 
     public void setEmail(String email) {

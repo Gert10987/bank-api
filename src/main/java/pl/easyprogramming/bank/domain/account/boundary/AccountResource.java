@@ -31,7 +31,6 @@ public class AccountResource {
                                                      @PathVariable(value = "accountNumber") String accountNumber,
                                                      @RequestBody MoneyDTO moneyDTO) {
 
-
         accountService.transfer(new AccountIdentity(accountId), new AccountNumber(accountNumber), new Money(moneyDTO));
 
         return new ResponseEntity(HttpStatus.OK);

@@ -8,20 +8,20 @@ public class TestData {
 
     private RegistrationDataDTO firstUserRegistrationData;
     private LoginDataDTO firstUserLogin;
-    private MoneyDTO firstUserDepositPayment;
+    private MoneyDTO firstUserTransferPayment;
 
     private RegistrationDataDTO secondUserRegistrationData;
     private LoginDataDTO secondUserLogin;
     private MoneyDTO secondUserDepositPayment;
 
     public TestData() {
-        initFirstuserRegisterData();
-        initFirstuserLoginData();
-        initFirstuserDepositPaymant();
+        initFirstUserRegisterData();
+        initFirstUserLoginData();
+        initFirstUserDepositPaymant();
 
         initSecondUserRegisterData();
         initSecondUserLoginData();
-        initSecondUserDepositPaymant();
+        initSecondUserDepositPayment();
     }
 
     public RegistrationDataDTO getFirstUserRegistrationData() {
@@ -32,8 +32,8 @@ public class TestData {
         return firstUserLogin;
     }
 
-    public MoneyDTO getFirstUserDepositPaymentData() {
-        return firstUserDepositPayment;
+    public MoneyDTO getFirstUserTransfertPaymentData() {
+        return firstUserTransferPayment;
     }
 
     public RegistrationDataDTO getSecondUserRegistrationData() {
@@ -48,7 +48,7 @@ public class TestData {
         return secondUserDepositPayment;
     }
 
-    public void initFirstuserRegisterData() {
+    public void initFirstUserRegisterData() {
 
         firstUserRegistrationData = new RegistrationDataDTO();
 
@@ -56,11 +56,16 @@ public class TestData {
         firstUserRegistrationData.setLastName("KER");
         firstUserRegistrationData.setEmail("Gregk@test.com");
         firstUserRegistrationData.setPassword("12345678");
-        firstUserRegistrationData.setAmountMoney("10.00");
-        firstUserRegistrationData.setCurrency("PLN");
+
+        MoneyDTO moneyDTO = new MoneyDTO();
+
+        moneyDTO.setAmount("10.00");
+        moneyDTO.setCurrency("PLN");
+
+        firstUserRegistrationData.setMoney(moneyDTO);
     }
 
-    public void initFirstuserLoginData() {
+    public void initFirstUserLoginData() {
 
         firstUserLogin = new LoginDataDTO();
 
@@ -68,12 +73,12 @@ public class TestData {
         firstUserLogin.setPassword("12345678");
     }
 
-    public void initFirstuserDepositPaymant() {
+    public void initFirstUserDepositPaymant() {
 
-        firstUserDepositPayment = new MoneyDTO();
+        firstUserTransferPayment = new MoneyDTO();
 
-        firstUserDepositPayment.setAmount("11.99");
-        firstUserDepositPayment.setCurrency("PLN");
+        firstUserTransferPayment.setAmount("5.00");
+        firstUserTransferPayment.setCurrency("PLN");
     }
 
     public void initSecondUserRegisterData() {
@@ -84,8 +89,13 @@ public class TestData {
         secondUserRegistrationData.setLastName("Gas");
         secondUserRegistrationData.setEmail("Michael@test.com");
         secondUserRegistrationData.setPassword("87654321");
-        secondUserRegistrationData.setAmountMoney("50.10");
-        secondUserRegistrationData.setCurrency("PLN");
+
+        MoneyDTO moneyDTO = new MoneyDTO();
+
+        moneyDTO.setAmount("50.10");
+        moneyDTO.setCurrency("PLN");
+
+        secondUserRegistrationData.setMoney(moneyDTO);
     }
 
     public void initSecondUserLoginData() {
@@ -96,7 +106,7 @@ public class TestData {
         secondUserLogin.setPassword("87654321");
     }
 
-    public void initSecondUserDepositPaymant() {
+    public void initSecondUserDepositPayment() {
 
         secondUserDepositPayment = new MoneyDTO();
 

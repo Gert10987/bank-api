@@ -33,7 +33,7 @@ public class Account {
     @OneToOne(cascade = CascadeType.ALL)
     private Identity identity;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Set<Payment> payments = new HashSet<>();
 
@@ -85,5 +85,9 @@ public class Account {
         Payment paymentEntity = new Payment(money, type);
 
         payments.add(paymentEntity);
+    }
+
+    public Set<Payment> payments() {
+        return payments;
     }
 }
