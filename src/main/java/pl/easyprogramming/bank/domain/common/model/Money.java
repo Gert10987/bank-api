@@ -1,23 +1,23 @@
 package pl.easyprogramming.bank.domain.common.model;
 
-import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public final class Money implements Serializable {
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING)
     private BigDecimal amount;
     private String currency;
+
+    private Money() {
+    }
 
     public Money(BigDecimal amount, String currency) {
         setAmount(amount);
         this.currency = currency;
-    }
-
-    public Money(MoneyDTO moneyDTO) {
-        this.amount = new BigDecimal(moneyDTO.getAmount());
-        this.currency = moneyDTO.getCurrency();
     }
 
     private void setAmount(BigDecimal amount) {
@@ -28,10 +28,16 @@ public final class Money implements Serializable {
         this.amount = amount.setScale(2);
     }
 
+    private void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    @JsonGetter
     public BigDecimal amount() {
         return amount;
     }
 
+    @JsonGetter
     public String currency() {
         return currency;
     }

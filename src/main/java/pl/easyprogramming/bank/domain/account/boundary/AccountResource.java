@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
 import pl.easyprogramming.bank.domain.account.model.AccountIdentity;
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.AccountService;
@@ -19,9 +18,9 @@ public class AccountResource {
 
     @RequestMapping(method = RequestMethod.PUT, value = "{accountId}/charge")
     public ResponseEntity charge(@PathVariable("accountId") Long accountId,
-                                   @RequestBody() MoneyDTO moneyDTO) {
+                                   @RequestBody() Money money) {
 
-        accountService.charge(new AccountIdentity(accountId), new Money(moneyDTO));
+        accountService.charge(new AccountIdentity(accountId), money);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -29,9 +28,9 @@ public class AccountResource {
     @RequestMapping(method = RequestMethod.PUT, value = "{accountId}/transfer/{accountNumber}/charge")
     public ResponseEntity transferMoneyToAnotherAccount(@PathVariable(value = "accountId") Long accountId,
                                                      @PathVariable(value = "accountNumber") String accountNumber,
-                                                     @RequestBody MoneyDTO moneyDTO) {
+                                                     @RequestBody Money money) {
 
-        accountService.transfer(new AccountIdentity(accountId), new AccountNumber(accountNumber), new Money(moneyDTO));
+        accountService.transfer(new AccountIdentity(accountId), new AccountNumber(accountNumber), money);
 
         return new ResponseEntity(HttpStatus.OK);
     }

@@ -32,8 +32,8 @@ public class User {
 
     public User(RegistrationData registrationData) {
 
-        this.email = registrationData.email().emailValue();
-        this.password = registrationData.password().passwordValue();
+        this.email = registrationData.email().value();
+        this.password = registrationData.password().value();
         this.registrationDateTime = registrationData.registeredDate().registeredAt();
     }
 

@@ -1,18 +1,25 @@
 package pl.easyprogramming.bank.domain;
 
-import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
-import pl.easyprogramming.bank.domain.user.dto.LoginDataDTO;
-import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
+import pl.easyprogramming.bank.domain.common.model.Email;
+import pl.easyprogramming.bank.domain.common.model.Money;
+import pl.easyprogramming.bank.domain.common.model.Name;
+import pl.easyprogramming.bank.domain.user.model.LoginData;
+import pl.easyprogramming.bank.domain.user.model.Password;
+import pl.easyprogramming.bank.domain.user.model.RegisterDate;
+import pl.easyprogramming.bank.domain.user.model.RegistrationData;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class TestData {
 
-    private RegistrationDataDTO firstUserRegistrationData;
-    private LoginDataDTO firstUserLogin;
-    private MoneyDTO firstUserTransferPayment;
+    private RegistrationData firstUserRegistrationData;
+    private LoginData firstUserLogin;
+    private Money firstUserTransferPayment;
 
-    private RegistrationDataDTO secondUserRegistrationData;
-    private LoginDataDTO secondUserLogin;
-    private MoneyDTO secondUserDepositPayment;
+    private RegistrationData secondUserRegistrationData;
+    private LoginData secondUserLogin;
+    private Money secondUserDepositPayment;
 
     public TestData() {
         initFirstUserRegisterData();
@@ -24,93 +31,67 @@ public class TestData {
         initSecondUserDepositPayment();
     }
 
-    public RegistrationDataDTO getFirstUserRegistrationData() {
+    public RegistrationData getFirstUserRegistrationData() {
         return firstUserRegistrationData;
     }
 
-    public LoginDataDTO getFirstUserLoginData() {
+    public LoginData getFirstUserLoginData() {
         return firstUserLogin;
     }
 
-    public MoneyDTO getFirstUserTransfertPaymentData() {
+    public Money getFirstUserTransfertPaymentData() {
         return firstUserTransferPayment;
     }
 
-    public RegistrationDataDTO getSecondUserRegistrationData() {
+    public RegistrationData getSecondUserRegistrationData() {
         return secondUserRegistrationData;
     }
 
-    public LoginDataDTO getSecondUserLoginData() {
+    public LoginData getSecondUserLoginData() {
         return secondUserLogin;
     }
 
-    public MoneyDTO getSecondUserDepositPaymentData() {
+    public Money getSecondUserDepositPaymentData() {
         return secondUserDepositPayment;
     }
 
     public void initFirstUserRegisterData() {
 
-        firstUserRegistrationData = new RegistrationDataDTO();
+        Name name = new Name("Greg", "KER");
+        Email email = new Email("Gregk@test.com");
+        Password password = new Password("12345678");
+        Money money = new Money(new BigDecimal("10.00"), "PLN");
 
-        firstUserRegistrationData.setFirstName("Greg");
-        firstUserRegistrationData.setLastName("KER");
-        firstUserRegistrationData.setEmail("Gregk@test.com");
-        firstUserRegistrationData.setPassword("12345678");
-
-        MoneyDTO moneyDTO = new MoneyDTO();
-
-        moneyDTO.setAmount("10.00");
-        moneyDTO.setCurrency("PLN");
-
-        firstUserRegistrationData.setMoney(moneyDTO);
+        firstUserRegistrationData = new RegistrationData(name, email, money, password);
     }
 
     public void initFirstUserLoginData() {
 
-        firstUserLogin = new LoginDataDTO();
-
-        firstUserLogin.setEmail("Gregk@test.com");
-        firstUserLogin.setPassword("12345678");
+        firstUserLogin = new LoginData(firstUserRegistrationData.email(), firstUserRegistrationData.password());
     }
 
     public void initFirstUserDepositPaymant() {
 
-        firstUserTransferPayment = new MoneyDTO();
-
-        firstUserTransferPayment.setAmount("5.00");
-        firstUserTransferPayment.setCurrency("PLN");
+        firstUserTransferPayment = new Money(new BigDecimal("5.00"), "PLN");
     }
 
     public void initSecondUserRegisterData() {
 
-        secondUserRegistrationData = new RegistrationDataDTO();
+        Name name = new Name("Michael", "Gas");
+        Email email = new Email("Michael@test.com");
+        Password password = new Password("87654321");
+        Money money = new Money(new BigDecimal("50.10"), "PLN");
 
-        secondUserRegistrationData.setFirstName("Michael");
-        secondUserRegistrationData.setLastName("Gas");
-        secondUserRegistrationData.setEmail("Michael@test.com");
-        secondUserRegistrationData.setPassword("87654321");
-
-        MoneyDTO moneyDTO = new MoneyDTO();
-
-        moneyDTO.setAmount("50.10");
-        moneyDTO.setCurrency("PLN");
-
-        secondUserRegistrationData.setMoney(moneyDTO);
+        secondUserRegistrationData = new RegistrationData(name, email, money, password);
     }
 
     public void initSecondUserLoginData() {
 
-        secondUserLogin = new LoginDataDTO();
-
-        secondUserLogin.setEmail("Michael@test.com");
-        secondUserLogin.setPassword("87654321");
+        secondUserLogin = new LoginData(secondUserRegistrationData.email(), secondUserRegistrationData.password());
     }
 
     public void initSecondUserDepositPayment() {
 
-        secondUserDepositPayment = new MoneyDTO();
-
-        secondUserDepositPayment.setAmount("200.00");
-        secondUserDepositPayment.setCurrency("PLN");
+        secondUserDepositPayment = new Money(new BigDecimal("200.00"), "PLN");
     }
 }

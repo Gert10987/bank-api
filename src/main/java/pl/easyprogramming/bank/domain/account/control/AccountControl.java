@@ -70,7 +70,7 @@ public class AccountControl implements AccountService {
         AccountNumber accountNumber = new AccountNumber(RandomStringUtils.random(26, false, true));
         Account account = new Account(registrationData, accountNumber);
 
-        Identity identity = new Identity(registrationData.name().firstName(), registrationData.name().lastName(), registrationData.email().emailValue());
+        Identity identity = new Identity(registrationData.name().firstName(), registrationData.name().lastName(), registrationData.email().value());
         Address address = new Address("London", "One");
 
         account.withIdentity(identity);

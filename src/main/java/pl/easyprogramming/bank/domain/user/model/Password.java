@@ -1,34 +1,40 @@
 package pl.easyprogramming.bank.domain.user.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.validation.ValidationException;
 
 public final class Password {
 
-    private String passwordValue;
+    private String value;
 
-    public Password(String passwordValue) {
-        setPassword(passwordValue);
+    private Password() {
     }
 
-    public String passwordValue() {
-        return passwordValue;
+    public Password(String value) {
+        setPassword(value);
     }
 
-    private void setPassword(String passwordValue) {
+    @JsonGetter
+    public String value() {
+        return value;
+    }
 
-        if (passwordValue == null)
+    private void setPassword(String value) {
+
+        if (value == null)
             throw new ValidationException("Password is null");
 
-        if (passwordValue.length() < 8)
+        if (value.length() < 8)
             throw new ValidationException("Password is not enough strong");
 
-        this.passwordValue = passwordValue;
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "Password{" +
-                "passwordValue='" + passwordValue + '\'' +
+                "value='" + value + '\'' +
                 '}';
     }
 }

@@ -43,8 +43,8 @@ public class LoginControl implements LoginService {
     @Override
     public ResponseEntity<String> login(Email email, Password password) {
 
-        String emailValue = email.emailValue();
-        String passwordValue = password.passwordValue();
+        String emailValue = email.value();
+        String passwordValue = password.value();
 
         User user = userRepository.findByEmail(emailValue);
         if (user == null) {

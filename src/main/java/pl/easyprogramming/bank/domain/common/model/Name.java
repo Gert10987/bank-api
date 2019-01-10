@@ -1,5 +1,7 @@
 package pl.easyprogramming.bank.domain.common.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import java.io.Serializable;
 
 public final class Name implements Serializable {
@@ -9,16 +11,29 @@ public final class Name implements Serializable {
     private String firstName;
     private String lastName;
 
+    private Name() {
+    }
+
     public Name(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
+    @JsonGetter
     public String firstName() {
         return firstName;
     }
 
+    @JsonGetter
     public String lastName() {
         return lastName;
+    }
+
+    private void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    private void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

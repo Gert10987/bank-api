@@ -3,10 +3,7 @@ package pl.easyprogramming.bank.domain.user.boundary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.easyprogramming.bank.domain.user.dto.LoginDataDTO;
-import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
-import pl.easyprogramming.bank.domain.common.model.Email;
-import pl.easyprogramming.bank.domain.user.model.Password;
+import pl.easyprogramming.bank.domain.user.model.LoginData;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 import pl.easyprogramming.bank.domain.user.model.login.LoginService;
 import pl.easyprogramming.bank.domain.user.model.registration.RegistrationService;
@@ -24,15 +21,15 @@ public class UserResource {
     private LoginService loginService;
 
     @RequestMapping(method = RequestMethod.POST, value = "register")
-    public ResponseEntity register(@RequestBody RegistrationDataDTO registrationDataDTO) {
+    public ResponseEntity register(@RequestBody RegistrationData registrationData) {
 
-        return registrationService.register(new RegistrationData(registrationDataDTO));
+        return registrationService.register(registrationData);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "login")
-    public ResponseEntity login(@RequestBody LoginDataDTO loginDataDTO) {
+    public ResponseEntity login(@RequestBody LoginData loginData) {
 
-        return loginService.login(new Email(loginDataDTO.getEmail()), new Password(loginDataDTO.getPassword()));
+        return loginService.login(loginData.email(), loginData.password());
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "logout")

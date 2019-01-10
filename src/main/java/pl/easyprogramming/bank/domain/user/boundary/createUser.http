@@ -10,23 +10,29 @@ POST http://localhost:8080/users/register
 Content-Type: application/json
 
 {
-    "firstName": "Greg",
-    "lastName": "KER",
-    "email": "Aaamd3sadsa1125114@test.com",
-    "password": "12345678",
+    "name":{
+        "firstName": "Greg",
+        "lastName": "KER"
+    },
+    "email": {
+        "value": "Aaamd3sadsa1125114@test.com"
+    },
+    "password": {
+        "value": "12345678"
+    },
     "money": {
-        "amountMoney": "10000.11",
+        "amount": "10000.11",
         "currency": "PLN"
     }
 }
 ###
 
 PUT http://localhost:8080/account/1/charge
-authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBYWFtZDNzYWRzYTExMjUxMTRAdGVzdC5jb20iLCJpYXQiOjE1NDcwNzEwNTYsImV4cCI6MTU0NzA3Mjg1NiwiaWQiOiIzNjg0ZTc3OC1iMjgyLTQ3YjAtOTY0Zi0wMmJkNjA4ZjhlYjAiLCJhY2NvdW50X2lkIjoxfQ.xy698XsMzviDqJqaQaiHjjSvt2LMsj0R3anwTE1BC4c
+authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBYWFtZDNzYWRzYTExMjUxMTRAdGVzdC5jb20iLCJpYXQiOjE1NDcxNDY0NzMsImV4cCI6MTU0NzE0ODI4MCwiaWQiOiJjM2ZhOTYzMy03MGUxLTQ1NDQtODYzMC0wMmUzOGYzOTdhOWEiLCJhY2NvdW50X2lkIjoxfQ.VhotL2LyFaEvrpCp5xvCAfV6HPOjbwK_SAO0-V2r0Cs
 Content-Type: application/json
 
 {
-    "amount": "10.99",
+    "amount": "10000.11",
     "currency": "PLN"
 }
 

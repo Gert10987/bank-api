@@ -36,12 +36,12 @@ public class RegistrationControl implements RegistrationService {
     @Override
     public ResponseEntity register(RegistrationData registrationData) {
 
-        if(!userRepository.existsByEmail(registrationData.email().emailValue())){
+        if(!userRepository.existsByEmail(registrationData.email().value())){
             userRepository.save(new User(registrationData));
 
             sendToQueueToCreateNewAccount(registrationData);
         } else {
-            throw new IllegalStateException("User with email " + registrationData.email().emailValue() + " exist");
+            throw new IllegalStateException("User with email " + registrationData.email().value() + " exist");
         }
 
         return new ResponseEntity(HttpStatus.CREATED);
@@ -50,7 +50,7 @@ public class RegistrationControl implements RegistrationService {
     @Override
     public void assignAccountId(AccountIdentity accountIdentity) {
 
-        User user = userRepository.findByEmail(accountIdentity.email().emailValue());
+        User user = userRepository.findByEmail(accountIdentity.email().value());
         user.assignAccountId(accountIdentity.id());
     }
 

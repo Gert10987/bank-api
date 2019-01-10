@@ -18,8 +18,9 @@ import org.springframework.web.context.WebApplicationContext;
 import pl.easyprogramming.bank.domain.TestData;
 import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
 import pl.easyprogramming.bank.domain.account.repository.entity.Account;
-import pl.easyprogramming.bank.domain.user.dto.LoginDataDTO;
-import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
+import pl.easyprogramming.bank.domain.common.model.Email;
+import pl.easyprogramming.bank.domain.user.model.LoginData;
+import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 import pl.easyprogramming.bank.domain.user.repository.UserRepository;
 import pl.easyprogramming.bank.domain.user.repository.entity.User;
 
@@ -88,16 +89,16 @@ public class BankApplicationTests {
     public void afterCreatedUserAccountShouldBeCreatedToo() throws Exception {
 
         //given
-        String email = testData.getFirstUserRegistrationData().getEmail();
+        RegistrationData registrationData = testData.getFirstUserRegistrationData();
 
         //when
-        registerUser(testData.getFirstUserRegistrationData())
+        registerUser(registrationData)
                 .andExpect(status().isCreated());
 
-        await().until(newUserIsUpdated(email));
+        await().until(newUserIsUpdated(registrationData.email()));
 
         //then
-        User createdUser = userRepository.findByEmail(email);
+        User createdUser = userRepository.findByEmail(registrationData.email().value());
 
         assertTrue(createdUser.isActive());
     }
@@ -106,13 +107,13 @@ public class BankApplicationTests {
     public void afterChargeAccountTotalValueOfMoneyShouldBeIncrease() throws Exception {
 
         //given
-        String email = testData.getSecondUserRegistrationData().getEmail();
+        RegistrationData secondUserRegistrationData = testData.getSecondUserRegistrationData();
 
-        registerUser(testData.getSecondUserRegistrationData());
+        registerUser(secondUserRegistrationData);
 
-        await().until(newUserIsUpdated(email));
+        await().until(newUserIsUpdated(secondUserRegistrationData.email()));
 
-        User createdUser = userRepository.findByEmail(email);
+        User createdUser = userRepository.findByEmail(secondUserRegistrationData.email().value());
 
         String jwtToken = loginUser(testData.getSecondUserLoginData());
 
@@ -132,7 +133,7 @@ public class BankApplicationTests {
         account = accountRepository.findById(createdUser.accountId())
                 .orElse(null);
 
-        assertEquals(totalValueOfMoneyBeforeCharge.add(new BigDecimal(testData.getSecondUserDepositPaymentData().getAmount())), account.totalMoney());
+        assertEquals(totalValueOfMoneyBeforeCharge.add(testData.getSecondUserDepositPaymentData().amount()), account.totalMoney());
     }
 
 
@@ -140,18 +141,23 @@ public class BankApplicationTests {
     public void afterTransferTotalValueOfMoneyOtherAccountShouldBeIncrease() throws Exception {
 
         //given
-        registerUser(testData.getFirstUserRegistrationData());
+        RegistrationData firstUserRegistrationData = testData.getFirstUserRegistrationData();
+        RegistrationData secondUserRegistrationData = testData.getSecondUserRegistrationData();
 
-        await().until(newUserIsUpdated(testData.getFirstUserRegistrationData().getEmail()));
+        LoginData firstUserLoginData = testData.getFirstUserLoginData();
 
-        registerUser(testData.getSecondUserRegistrationData());
+        registerUser(firstUserRegistrationData);
 
-        await().until(newUserIsUpdated(testData.getSecondUserRegistrationData().getEmail()));
+        await().until(newUserIsUpdated(firstUserRegistrationData.email()));
 
-        String jwtToken = loginUser(testData.getFirstUserLoginData());
+        registerUser(secondUserRegistrationData);
 
-        User firstUser = userRepository.findByEmail(testData.getFirstUserLoginData().getEmail());
-        User secondUser = userRepository.findByEmail(testData.getSecondUserLoginData().getEmail());
+        await().until(newUserIsUpdated(secondUserRegistrationData.email()));
+
+        String jwtToken = loginUser(firstUserLoginData);
+
+        User firstUser = userRepository.findByEmail(firstUserLoginData.email().value());
+        User secondUser = userRepository.findByEmail(secondUserRegistrationData.email().value());
 
         String secondUserAccountNumber = accountRepository.findAccountNumberById(secondUser.accountId());
         Account secondUserAccount = accountRepository.findByAccountNumber(secondUserAccountNumber)
@@ -170,7 +176,7 @@ public class BankApplicationTests {
         secondUserAccount = accountRepository.findByAccountNumber(secondUserAccountNumber)
                 .orElse(null);
 
-        assertEquals(totalValueOfMoneyBeforeTransfer.add(new BigDecimal(testData.getFirstUserTransfertPaymentData().getAmount())), secondUserAccount.totalMoney());
+        assertEquals(totalValueOfMoneyBeforeTransfer.add(testData.getFirstUserTransfertPaymentData().amount()), secondUserAccount.totalMoney());
     }
 
 
@@ -178,11 +184,13 @@ public class BankApplicationTests {
     public void afterChargeAccountPaymentShouldBePersist() throws Exception {
 
         //given
-        registerUser(testData.getSecondUserRegistrationData());
+        RegistrationData secondUserRegistrationData = testData.getSecondUserRegistrationData();
 
-        await().until(newUserIsUpdated(testData.getSecondUserRegistrationData().getEmail()));
+        registerUser(secondUserRegistrationData);
 
-        User createdUser = userRepository.findByEmail(testData.getSecondUserRegistrationData().getEmail());
+        await().until(newUserIsUpdated(secondUserRegistrationData.email()));
+
+        User createdUser = userRepository.findByEmail(secondUserRegistrationData.email().value());
 
         String jwtToken = loginUser(testData.getSecondUserLoginData());
 
@@ -199,25 +207,25 @@ public class BankApplicationTests {
 
         assertTrue(account.payments().stream()
                 .anyMatch(payment ->
-                        payment.amount().compareTo(new BigDecimal(testData.getSecondUserDepositPaymentData().getAmount())) == 0));
+                        payment.amount().compareTo(testData.getSecondUserDepositPaymentData().amount()) == 0));
     }
 
-    private String loginUser(LoginDataDTO firstUserLoginData) throws Exception {
+    private String loginUser(LoginData loginData) throws Exception {
         return mvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(firstUserLoginData)))
+                .content(objectMapper.writeValueAsString(loginData)))
                 .andReturn().getResponse().getContentAsString();
     }
 
-    private ResultActions registerUser(RegistrationDataDTO firstUserRegistrationData) throws Exception {
+    private ResultActions registerUser(RegistrationData registrationData) throws Exception {
         return mvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(firstUserRegistrationData)));
+                .content(objectMapper.writeValueAsString(registrationData)));
     }
 
-    private Callable<Boolean> newUserIsUpdated(String email) {
+    private Callable<Boolean> newUserIsUpdated(Email email) {
         return () -> {
-            return userRepository.findByEmail(email).isActive(); // The condition that must be fulfilled
+            return userRepository.findByEmail(email.value()).isActive(); // The condition that must be fulfilled
         };
     }
 }

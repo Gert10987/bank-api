@@ -1,5 +1,8 @@
 package pl.easyprogramming.bank.domain.common.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.ValidationException;
 import java.io.Serializable;
 
@@ -7,41 +10,49 @@ public final class Email implements Serializable {
 
     private static final long serialVersionUID = 3089334206779236478L;
 
-    private String emailValue;
+    private String value;
+
+    @JsonIgnore
     private String name;
+    @JsonIgnore
     private String organization;
 
-    public Email(String emailValue) {
-        setEmailValue(emailValue);
+    private Email() {
+    }
 
-        String[] parts = this.emailValue.split("@");
+    public Email(String value) {
+        setValue(value);
+    }
+
+    @JsonGetter
+    public String value(){
+        return this.value;
+    }
+
+    private void setValue(String value){
+
+        if (value == null)
+            throw new ValidationException("Email is null");
+
+        if (value.length() < 3)
+            throw new ValidationException("Email address should have more chars");
+
+        if (!value.contains("@"))
+            throw new ValidationException("Email address is not valid");
+
+
+        String[] parts = value.split("@");
 
         this.name = parts[0];
         this.organization = parts[1];
-    }
 
-    public String emailValue(){
-        return this.emailValue;
-    }
-
-    private void setEmailValue(String emailValue){
-
-        if (emailValue == null)
-            throw new ValidationException("Email is null");
-
-        if (emailValue.length() < 3)
-            throw new ValidationException("Email address should have more chars");
-
-        if (!emailValue.contains("@"))
-            throw new ValidationException("Email address is not valid");
-
-        this.emailValue = emailValue;
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "Email{" +
-                "fullEmail='" + emailValue + '\'' +
+                "fullEmail='" + value + '\'' +
                 ", name='" + name + '\'' +
                 ", organization='" + organization + '\'' +
                 '}';
