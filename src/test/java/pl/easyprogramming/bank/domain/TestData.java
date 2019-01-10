@@ -5,21 +5,22 @@ import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.common.model.Name;
 import pl.easyprogramming.bank.domain.user.model.LoginData;
 import pl.easyprogramming.bank.domain.user.model.Password;
-import pl.easyprogramming.bank.domain.user.model.RegisterDate;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
+import pl.easyprogramming.bank.domain.user.repository.entity.User;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class TestData {
 
     private RegistrationData firstUserRegistrationData;
     private LoginData firstUserLogin;
     private Money firstUserTransferPayment;
+    private User firstUser;
 
     private RegistrationData secondUserRegistrationData;
     private LoginData secondUserLogin;
     private Money secondUserDepositPayment;
+    private User secondUser;
 
     public TestData() {
         initFirstUserRegisterData();

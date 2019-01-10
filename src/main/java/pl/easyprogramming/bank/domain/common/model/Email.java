@@ -25,11 +25,11 @@ public final class Email implements Serializable {
     }
 
     @JsonGetter
-    public String value(){
+    public String value() {
         return this.value;
     }
 
-    private void setValue(String value){
+    private void setValue(String value) {
 
         if (value == null)
             throw new ValidationException("Email is null");

@@ -2,8 +2,6 @@ package pl.easyprogramming.bank.domain.user.control;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +32,9 @@ public class RegistrationControl implements RegistrationService {
     }
 
     @Override
-    public ResponseEntity register(RegistrationData registrationData) {
+    public boolean register(RegistrationData registrationData) {
 
-        if(!userRepository.existsByEmail(registrationData.email().value())){
+        if (!userRepository.existsByEmail(registrationData.email().value())) {
             userRepository.save(new User(registrationData));
 
             sendToQueueToCreateNewAccount(registrationData);
@@ -44,7 +42,7 @@ public class RegistrationControl implements RegistrationService {
             throw new IllegalStateException("User with email " + registrationData.email().value() + " exist");
         }
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return true;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class RegistrationControl implements RegistrationService {
         user.assignAccountId(accountIdentity.id());
     }
 
-    private void sendToQueueToCreateNewAccount(RegistrationData registrationData){
+    private void sendToQueueToCreateNewAccount(RegistrationData registrationData) {
         //send to queue to register in account repository
         jmsTemplate.convertAndSend(accountQueue, registrationData);
     }

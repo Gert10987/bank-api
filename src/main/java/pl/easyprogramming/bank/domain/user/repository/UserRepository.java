@@ -8,5 +8,6 @@ import pl.easyprogramming.bank.domain.user.repository.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
+
     boolean existsByEmail(String email);
 }

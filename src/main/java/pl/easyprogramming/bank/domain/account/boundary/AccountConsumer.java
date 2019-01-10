@@ -13,7 +13,7 @@ public class AccountConsumer {
 
     @Autowired
     public AccountConsumer(AccountService accountService) {
-        this.accountService= accountService;
+        this.accountService = accountService;
     }
 
     @JmsListener(destination = "AccountQueue")

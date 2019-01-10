@@ -2,8 +2,8 @@ package pl.easyprogramming.bank.domain.user.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.common.model.Email;
+import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.common.model.Name;
 
 import java.io.Serializable;
@@ -72,5 +72,10 @@ public final class RegistrationData implements Serializable {
 
     private void setPassword(Password password) {
         this.password = password;
+    }
+
+    @JsonIgnore
+    public void setRegisteredDate(RegisterDate registeredDate) {
+        this.registeredDate = registeredDate;
     }
 }

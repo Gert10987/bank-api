@@ -18,7 +18,7 @@ public class AccountResource {
 
     @RequestMapping(method = RequestMethod.PUT, value = "{accountId}/charge")
     public ResponseEntity charge(@PathVariable("accountId") Long accountId,
-                                   @RequestBody() Money money) {
+                                 @RequestBody() Money money) {
 
         accountService.charge(new AccountIdentity(accountId), money);
 
@@ -27,8 +27,8 @@ public class AccountResource {
 
     @RequestMapping(method = RequestMethod.PUT, value = "{accountId}/transfer/{accountNumber}/charge")
     public ResponseEntity transferMoneyToAnotherAccount(@PathVariable(value = "accountId") Long accountId,
-                                                     @PathVariable(value = "accountNumber") String accountNumber,
-                                                     @RequestBody Money money) {
+                                                        @PathVariable(value = "accountNumber") String accountNumber,
+                                                        @RequestBody Money money) {
 
         accountService.transfer(new AccountIdentity(accountId), new AccountNumber(accountNumber), money);
 

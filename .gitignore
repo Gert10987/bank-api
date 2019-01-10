@@ -26,3 +26,6 @@
 
 ### Maven ###
 .mvn/
+
+### Mac ###
+.DS_Store

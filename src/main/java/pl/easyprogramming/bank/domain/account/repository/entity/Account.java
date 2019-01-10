@@ -41,7 +41,8 @@ public class Account {
     @JoinColumn(name = "account_id")
     private Set<Address> addresses = new HashSet<>();
 
-    private Account() { }
+    private Account() {
+    }
 
     public Account(RegistrationData registrationData, AccountNumber accountNumber) {
 
@@ -52,7 +53,7 @@ public class Account {
         this.accountNumber = accountNumber.accountNumber();
     }
 
-    public Long id(){
+    public Long id() {
         return id;
     }
 
@@ -60,7 +61,7 @@ public class Account {
         return totalMoney;
     }
 
-    public void updateTotalValueOfMoney(BigDecimal totalMoney){
+    public void updateTotalValueOfMoney(BigDecimal totalMoney) {
         this.totalMoney = totalMoney;
     }
 
@@ -68,7 +69,7 @@ public class Account {
         this.identity = identity;
     }
 
-    public void addAddress(Address address){
+    public void addAddress(Address address) {
         this.addresses.add(address);
     }
 
@@ -80,7 +81,7 @@ public class Account {
         return defualtCurrency;
     }
 
-    public void addPaymant(Money money, PaymantType type){
+    public void addPayment(Money money, PaymantType type) {
 
         Payment paymentEntity = new Payment(money, type);
 
@@ -89,5 +90,9 @@ public class Account {
 
     public Set<Payment> payments() {
         return payments;
+    }
+
+    public Identity identity() {
+        return identity;
     }
 }

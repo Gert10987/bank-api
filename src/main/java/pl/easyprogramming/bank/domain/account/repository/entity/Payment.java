@@ -28,7 +28,8 @@ public class Payment {
     @Column
     private LocalDateTime dateTime;
 
-    private Payment() { }
+    private Payment() {
+    }
 
     public Payment(Money money, PaymantType paymantType) {
 
@@ -36,7 +37,7 @@ public class Payment {
 
         this.currency = money.currency();
 
-        if(paymantType.equals(PaymantType.WITHDRAWALS))
+        if (paymantType.equals(PaymantType.WITHDRAWALS))
             this.amount = money.amount().negate();
         else
             this.amount = money.amount();

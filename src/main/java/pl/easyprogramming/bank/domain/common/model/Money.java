@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public final class Money implements Serializable {
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal amount;
     private String currency;
 
@@ -22,7 +22,7 @@ public final class Money implements Serializable {
 
     private void setAmount(BigDecimal amount) {
 
-        if(amount.compareTo(BigDecimal.ONE) <= 0)
+        if (amount.compareTo(BigDecimal.ONE) <= 0)
             throw new IllegalArgumentException("Amount of money should be more than 0");
 
         this.amount = amount.setScale(2);

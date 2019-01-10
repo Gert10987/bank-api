@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.easyprogramming.bank.domain.account.model.*;
+import pl.easyprogramming.bank.domain.account.model.AccountIdentity;
+import pl.easyprogramming.bank.domain.account.model.AccountNumber;
+import pl.easyprogramming.bank.domain.account.model.AccountService;
+import pl.easyprogramming.bank.domain.account.model.PaymantType;
 import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
 import pl.easyprogramming.bank.domain.account.repository.entity.Account;
 import pl.easyprogramming.bank.domain.account.repository.entity.Address;
@@ -41,7 +44,7 @@ public class AccountControl implements AccountService {
 
         Account account = findAccountById(accountIdentity.id());
 
-        account.addPaymant(money, PaymantType.DEPOSIT);
+        account.addPayment(money, PaymantType.DEPOSIT);
         account.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(account.totalMoney(), money, account.defaultCurrency()));
     }
 
@@ -51,16 +54,16 @@ public class AccountControl implements AccountService {
         Account account = findAccountById(accountIdentity.id());
         Account destinationAccount = findAccountByAccountNumber(otherAccountNumber.accountNumber());
 
-        if(!account.isActive())
+        if (!account.isActive())
             throw new ValidationException("Lack of account funds");
 
-        if(account.totalMoney().compareTo(money.amount()) <= 0)
+        if (account.totalMoney().compareTo(money.amount()) <= 0)
             throw new ValidationException("Insufficient amount of funds on the account");
 
-        account.addPaymant(money, PaymantType.WITHDRAWALS);
+        account.addPayment(money, PaymantType.WITHDRAWALS);
         account.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(account.totalMoney(), money, account.defaultCurrency()));
 
-        destinationAccount.addPaymant(money, PaymantType.DEPOSIT);
+        destinationAccount.addPayment(money, PaymantType.DEPOSIT);
         destinationAccount.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(destinationAccount.totalMoney(), money, destinationAccount.defaultCurrency()));
     }
 
@@ -71,6 +74,8 @@ public class AccountControl implements AccountService {
         Account account = new Account(registrationData, accountNumber);
 
         Identity identity = new Identity(registrationData.name().firstName(), registrationData.name().lastName(), registrationData.email().value());
+
+        //TODO Add support for addresses
         Address address = new Address("London", "One");
 
         account.withIdentity(identity);
@@ -82,18 +87,18 @@ public class AccountControl implements AccountService {
         jmsTemplate.convertAndSend(userQueue, new AccountIdentity(account.id(), registrationData.email()));
     }
 
-    private BigDecimal calculateNewTotalValueOfMoney(BigDecimal currentTotalValueOfMoney, Money transferAmountOfMoney, String defaultCurrency){
+    private BigDecimal calculateNewTotalValueOfMoney(BigDecimal currentTotalValueOfMoney, Money transferAmountOfMoney, String defaultCurrency) {
 
         Money newTotalMoneyValue = null;
 
-        if(!transferAmountOfMoney.currency().equals(defaultCurrency)){
+        if (!transferAmountOfMoney.currency().equals(defaultCurrency)) {
 
             BigDecimal amountOfMoneyAfterConversion = currencyConversion(transferAmountOfMoney, defaultCurrency);
 
             newTotalMoneyValue = new Money(currentTotalValueOfMoney.add(amountOfMoneyAfterConversion), defaultCurrency);
 
-        }else {
-            if(currentTotalValueOfMoney != null)
+        } else {
+            if (currentTotalValueOfMoney != null)
                 newTotalMoneyValue = new Money(currentTotalValueOfMoney.add(transferAmountOfMoney.amount()), defaultCurrency);
             else
                 newTotalMoneyValue = new Money(transferAmountOfMoney.amount(), defaultCurrency);
@@ -108,12 +113,12 @@ public class AccountControl implements AccountService {
         return tranferMoney.amount();
     }
 
-    private Account findAccountById(Long id){
+    private Account findAccountById(Long id) {
         return accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Account Not Found"));
     }
 
-    private Account findAccountByAccountNumber(String accountNumber){
+    private Account findAccountByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new IllegalStateException("Account Not Found"));
     }

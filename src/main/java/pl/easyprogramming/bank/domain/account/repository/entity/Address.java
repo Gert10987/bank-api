@@ -14,7 +14,8 @@ public class Address {
 
     private String street;
 
-    private Address() { }
+    private Address() {
+    }
 
     public Address(String city, String street) {
         this.city = city;

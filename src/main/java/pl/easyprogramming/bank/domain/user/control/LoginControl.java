@@ -5,8 +5,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,17 +29,14 @@ public class LoginControl implements LoginService {
     @Value("${secret-key}")
     private String secret;
 
+    @Autowired
     private UserRepository userRepository;
-    private ExpireTokenRepository expireTokenRepository;
 
     @Autowired
-    public LoginControl(UserRepository userRepository, ExpireTokenRepository expireTokenRepository) {
-        this.userRepository = userRepository;
-        this.expireTokenRepository = expireTokenRepository;
-    }
+    private ExpireTokenRepository expireTokenRepository;
 
     @Override
-    public ResponseEntity<String> login(Email email, Password password) {
+    public String login(Email email, Password password) {
 
         String emailValue = email.value();
         String passwordValue = password.value();
@@ -55,8 +50,8 @@ public class LoginControl implements LoginService {
             throw new AuthorizationServiceException("Invalid Password.");
         }
 
-        if(!user.isActive()){
-            throw new AuthorizationServiceException("Account is not active, please contact with support");
+        if (!user.isActive()) {
+            throw new AuthorizationServiceException("Account is not active, please contact with support.");
         }
 
         Date currentDate = new Date();
@@ -71,17 +66,17 @@ public class LoginControl implements LoginService {
 
         user.lastLoggedAt(LocalDateTime.now());
 
-        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        return jwtToken;
     }
 
     @Override
-    public ResponseEntity logout(UUID uuid) {
+    public boolean logout(UUID uuid) {
         expireTokenRepository.save(new ExpireToken(uuid));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return true;
     }
 
-    private Date addMinutesToCurrentDate(int minutesToAdd){
+    private Date addMinutesToCurrentDate(int minutesToAdd) {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
