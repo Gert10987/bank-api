@@ -1,60 +1,106 @@
 package pl.easyprogramming.bank.domain;
 
+import pl.easyprogramming.bank.domain.common.dto.MoneyDTO;
+import pl.easyprogramming.bank.domain.user.dto.LoginDataDTO;
+import pl.easyprogramming.bank.domain.user.dto.RegistrationDataDTO;
+
 public class TestData {
 
-    public static String firstuserRegisterData() {
+    private RegistrationDataDTO firstUserRegistrationData;
+    private LoginDataDTO firstUserLogin;
+    private MoneyDTO firstUserDepositPayment;
 
-        return "{\n" +
-                "    \"firstName\": \"Greg\",\n" +
-                "    \"lastName\": \"KER\",\n" +
-                "    \"email\": \"Gregk@test.com\",\n" +
-                "    \"password\": \"12345678\",\n" +
-                "    \"amountMoney\": \"10.00\",\n" +
-                "    \"currency\": \"PLN\"\n" +
-                "}";
+    private RegistrationDataDTO secondUserRegistrationData;
+    private LoginDataDTO secondUserLogin;
+    private MoneyDTO secondUserDepositPayment;
+
+    public TestData() {
+        initFirstuserRegisterData();
+        initFirstuserLoginData();
+        initFirstuserDepositPaymant();
+
+        initSecondUserRegisterData();
+        initSecondUserLoginData();
+        initSecondUserDepositPaymant();
     }
 
-    public static String firstuserLoginData() {
-
-        return "{\n" +
-                "    \"email\": \"Gregk@test.com\",\n" +
-                "    \"password\": \"12345678\"\n" +
-                "}\n";
+    public RegistrationDataDTO getFirstUserRegistrationData() {
+        return firstUserRegistrationData;
     }
 
-    public static String firstuserDepositPaymant() {
-
-        return "{\n" +
-                "    \"amount\": \"11.99\",\n" +
-                "    \"currency\": \"PLN\"\n" +
-                "}";
+    public LoginDataDTO getFirstUserLoginData() {
+        return firstUserLogin;
     }
 
-    public static String secondUserRegisterData() {
-
-        return "{\n" +
-                "    \"firstName\": \"Michael\",\n" +
-                "    \"lastName\": \"Gas\",\n" +
-                "    \"email\": \"Michael@test.com\",\n" +
-                "    \"password\": \"12345678\",\n" +
-                "    \"amountMoney\": \"50.10\",\n" +
-                "    \"currency\": \"PLN\"\n" +
-                "}";
+    public MoneyDTO getFirstUserDepositPaymentData() {
+        return firstUserDepositPayment;
     }
 
-    public static String secondUserLoginData() {
-
-        return "{\n" +
-                "    \"email\": \"Michael@test.com\",\n" +
-                "    \"password\": \"12345678\"\n" +
-                "}\n";
+    public RegistrationDataDTO getSecondUserRegistrationData() {
+        return secondUserRegistrationData;
     }
 
-    public static String secondUserDepositPaymant() {
+    public LoginDataDTO getSecondUserLoginData() {
+        return secondUserLogin;
+    }
 
-        return "{\n" +
-                "    \"amount\": \"200.00\",\n" +
-                "    \"currency\": \"PLN\"\n" +
-                "}";
+    public MoneyDTO getSecondUserDepositPaymentData() {
+        return secondUserDepositPayment;
+    }
+
+    public void initFirstuserRegisterData() {
+
+        firstUserRegistrationData = new RegistrationDataDTO();
+
+        firstUserRegistrationData.setFirstName("Greg");
+        firstUserRegistrationData.setLastName("KER");
+        firstUserRegistrationData.setEmail("Gregk@test.com");
+        firstUserRegistrationData.setPassword("12345678");
+        firstUserRegistrationData.setAmountMoney("10.00");
+        firstUserRegistrationData.setCurrency("PLN");
+    }
+
+    public void initFirstuserLoginData() {
+
+        firstUserLogin = new LoginDataDTO();
+
+        firstUserLogin.setEmail("Gregk@test.com");
+        firstUserLogin.setPassword("12345678");
+    }
+
+    public void initFirstuserDepositPaymant() {
+
+        firstUserDepositPayment = new MoneyDTO();
+
+        firstUserDepositPayment.setAmount("11.99");
+        firstUserDepositPayment.setCurrency("PLN");
+    }
+
+    public void initSecondUserRegisterData() {
+
+        secondUserRegistrationData = new RegistrationDataDTO();
+
+        secondUserRegistrationData.setFirstName("Michael");
+        secondUserRegistrationData.setLastName("Gas");
+        secondUserRegistrationData.setEmail("Michael@test.com");
+        secondUserRegistrationData.setPassword("87654321");
+        secondUserRegistrationData.setAmountMoney("50.10");
+        secondUserRegistrationData.setCurrency("PLN");
+    }
+
+    public void initSecondUserLoginData() {
+
+        secondUserLogin = new LoginDataDTO();
+
+        secondUserLogin.setEmail("Michael@test.com");
+        secondUserLogin.setPassword("87654321");
+    }
+
+    public void initSecondUserDepositPaymant() {
+
+        secondUserDepositPayment = new MoneyDTO();
+
+        secondUserDepositPayment.setAmount("200.00");
+        secondUserDepositPayment.setCurrency("PLN");
     }
 }

@@ -19,14 +19,6 @@ public class RegistrationDataDTO {
         return lastName;
     }
 
-    public String email(){
-        return this.email;
-    }
-
-    public String password(){
-        return this.password;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -35,12 +27,12 @@ public class RegistrationDataDTO {
         this.lastName = lastName;
     }
 
-    public void setMoney(String money) {
-        this.amountMoney = money;
-    }
-
     public String getAmountMoney() {
         return amountMoney;
+    }
+
+    public void setAmountMoney(String amountMoney) {
+        this.amountMoney = amountMoney;
     }
 
     public String getCurrency() {
@@ -57,5 +49,13 @@ public class RegistrationDataDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

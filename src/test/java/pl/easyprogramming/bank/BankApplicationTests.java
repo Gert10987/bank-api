@@ -1,5 +1,6 @@
 package pl.easyprogramming.bank;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +23,12 @@ import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
 
 @RunWith(SpringRunner.class)
@@ -51,6 +53,11 @@ public class BankApplicationTests {
     @Value("${secret-key}")
     private String secret;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private TestData testData = new TestData();
+
     @Before
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context)
@@ -70,12 +77,12 @@ public class BankApplicationTests {
     public void afterCreatedUserAccountShouldBeCreatedToo() throws Exception {
 
         //given
-        String email = "Gregk@test.com";
+        String email = testData.getFirstUserRegistrationData().getEmail();
 
         //when
         mvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestData.firstuserRegisterData()))
+                .content(objectMapper.writeValueAsString(testData.getFirstUserRegistrationData())))
                 .andExpect(status().isCreated());
 
         await().until(newUserIsUpdated(email));
@@ -90,32 +97,40 @@ public class BankApplicationTests {
     public void afterChargeAccountTotalValueOfMoneyShouldBeIncrease() throws Exception {
 
         //given
-        String email = "Michael@test.com";
+        String email = testData.getSecondUserRegistrationData().getEmail();
 
         mvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestData.secondUserRegisterData()))
+                .content(objectMapper.writeValueAsString(testData.getSecondUserRegistrationData())))
                 .andExpect(status().isCreated());
 
         await().until(newUserIsUpdated(email));
 
+        User createdUser = userRepository.findByEmail(email);
+
         String jwtToken = mvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestData.secondUserLoginData()))
+                .content(objectMapper.writeValueAsString(testData.getSecondUserLoginData())))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        //when
-        mvc.perform(put("/account/1/charge")
-                .header("authorization", "Bearer " + jwtToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestData.secondUserDepositPaymant()))
-                .andExpect(status().isOk());
-
-        Account account = accountRepository.findById(1L)
+        Account account = accountRepository.findById(createdUser.accountId())
                 .orElse(null);
 
-        assertEquals(new BigDecimal("250.10"), account.totalMoney());
+        BigDecimal totalValueOfMoneyBeforeCharge = account.totalMoney();
+
+        //when
+        mvc.perform(put("/account/" + createdUser.accountId() + "/charge")
+                .header("authorization", "Bearer " + jwtToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testData.getSecondUserDepositPaymentData())))
+                .andExpect(status().isOk());
+
+        //then
+        account = accountRepository.findById(createdUser.accountId())
+                .orElse(null);
+
+        assertEquals(totalValueOfMoneyBeforeCharge.add(new BigDecimal(testData.getSecondUserDepositPaymentData().getAmount())), account.totalMoney());
     }
 
     private Callable<Boolean> newUserIsUpdated(String email) {

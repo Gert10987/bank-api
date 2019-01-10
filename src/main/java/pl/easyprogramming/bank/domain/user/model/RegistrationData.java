@@ -21,8 +21,8 @@ public final class RegistrationData implements Serializable {
     public RegistrationData(RegistrationDataDTO registrationDataDTO) {
 
         this.name = new Name(registrationDataDTO.getFirstName(), registrationDataDTO.getLastName());
-        this.email = new Email(registrationDataDTO.email());
-        this.password = new Password(registrationDataDTO.password());
+        this.email = new Email(registrationDataDTO.getEmail());
+        this.password = new Password(registrationDataDTO.getPassword());
         this.money = new Money(new BigDecimal(registrationDataDTO.getAmountMoney()), registrationDataDTO.getCurrency());
 
         this.registeredDate = new RegisterDate(LocalDateTime.now());
