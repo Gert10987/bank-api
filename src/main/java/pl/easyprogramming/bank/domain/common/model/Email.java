@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.ValidationException;
 import java.io.Serializable;
+import java.util.Objects;
 
 public final class Email implements Serializable {
 
@@ -50,11 +51,27 @@ public final class Email implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Email email = (Email) o;
+        return Objects.equals(value, email.value) &&
+                Objects.equals(name, email.name) &&
+                Objects.equals(organization, email.organization);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(value, name, organization);
+    }
+
+    @Override
     public String toString() {
-        return "Email{" +
-                "fullEmail='" + value + '\'' +
-                ", name='" + name + '\'' +
-                ", organization='" + organization + '\'' +
-                '}';
+        return new StringBuilder("Email{").
+                append("value='").append(value).append('\'').
+                append(", name='").append(name).append('\'').
+                append(", organization='").append(organization).append('\'').
+                append('}').toString();
     }
 }

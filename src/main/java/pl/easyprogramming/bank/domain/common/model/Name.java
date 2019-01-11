@@ -3,6 +3,7 @@ package pl.easyprogramming.bank.domain.common.model;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public final class Name implements Serializable {
 
@@ -35,5 +36,28 @@ public final class Name implements Serializable {
 
     private void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Name name = (Name) o;
+        return Objects.equals(firstName, name.firstName) &&
+                Objects.equals(lastName, name.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(firstName, lastName);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("Name{").
+                append("firstName='").append(firstName).append('\'').
+                append(", lastName='").append(lastName).append('\'').
+                append('}').toString();
     }
 }

@@ -8,6 +8,7 @@ import pl.easyprogramming.bank.domain.common.model.Name;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public final class RegistrationData implements Serializable {
 
@@ -77,5 +78,34 @@ public final class RegistrationData implements Serializable {
     @JsonIgnore
     public void setRegisteredDate(RegisterDate registeredDate) {
         this.registeredDate = registeredDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegistrationData that = (RegistrationData) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(money, that.money) &&
+                Objects.equals(registeredDate, that.registeredDate) &&
+                Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, email, money, registeredDate, password);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("RegistrationData{").
+                append("name=").append(name).append('\'').
+                append(", email=").append(email).append('\'').
+                append(", money=").append(money).append('\'').
+                append(", registeredDate=").append(registeredDate).append('\'').
+                append(", password=").append(password).append('\'').
+                append('}').toString();
     }
 }

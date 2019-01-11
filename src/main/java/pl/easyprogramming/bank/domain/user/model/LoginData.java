@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import pl.easyprogramming.bank.domain.common.model.Email;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public final class LoginData implements Serializable {
 
@@ -36,5 +37,28 @@ public final class LoginData implements Serializable {
 
     private void setPassword(Password password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoginData loginData = (LoginData) o;
+        return Objects.equals(email, loginData.email) &&
+                Objects.equals(password, loginData.password);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(email, password);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("LoginData{").
+                append("email=").append(email).append('\'').
+                append(", password=").append(password).append('\'').
+                append('}').toString();
     }
 }
