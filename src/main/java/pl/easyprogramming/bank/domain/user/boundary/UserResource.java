@@ -11,6 +11,7 @@ import pl.easyprogramming.bank.domain.user.model.registration.RegistrationServic
 
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("users")
 public class UserResource {

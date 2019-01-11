@@ -32,6 +32,8 @@ public final class Email implements Serializable {
 
     private void setValue(String value) {
 
+        //TODO Add real examples of validation
+
         if (value == null)
             throw new ValidationException("Email is null");
 

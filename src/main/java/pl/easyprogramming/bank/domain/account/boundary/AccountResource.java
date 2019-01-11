@@ -9,6 +9,7 @@ import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.AccountService;
 import pl.easyprogramming.bank.domain.common.model.Money;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("account")
 public class AccountResource {
