@@ -3,6 +3,7 @@ package pl.easyprogramming.bank.domain.common.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
+import javax.validation.ValidationException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -24,7 +25,7 @@ public final class Money implements Serializable {
     private void setAmount(BigDecimal amount) {
 
         if (amount.compareTo(BigDecimal.ONE) <= 0)
-            throw new IllegalArgumentException("Amount of money should be more than 0");
+            throw new ValidationException("Amount of money should be more than 0");
 
         this.amount = amount.setScale(2);
     }
