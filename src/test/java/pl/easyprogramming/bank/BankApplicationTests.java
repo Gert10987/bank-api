@@ -166,7 +166,7 @@ public class BankApplicationTests {
         BigDecimal totalValueOfMoneyBeforeTransfer = secondUserAccountEntity.totalMoney();
 
         //when
-        mvc.perform(put("/account/" + firstUser.accountId() + "/transfer/" + secondUserAccountNumber + "/charge")
+        mvc.perform(put("/account/" + firstUser.accountId() + "/transfer/" + secondUserAccountNumber)
                 .header("authorization", "Bearer " + jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(testData.getFirstUserTransfertPaymentData())))
