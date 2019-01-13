@@ -34,6 +34,7 @@ public class RegistrationControl implements RegistrationService {
     @Override
     public boolean register(RegistrationData registrationData) {
 
+        // TODO Encode password
         if (!userRepository.existsByEmail(registrationData.email().value())) {
             userRepository.save(new User(registrationData));
 

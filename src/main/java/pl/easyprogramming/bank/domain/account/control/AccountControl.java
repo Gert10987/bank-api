@@ -6,10 +6,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.easyprogramming.bank.domain.account.model.AccountIdentity;
-import pl.easyprogramming.bank.domain.account.model.AccountNumber;
-import pl.easyprogramming.bank.domain.account.model.AccountService;
-import pl.easyprogramming.bank.domain.account.model.PaymantType;
+import pl.easyprogramming.bank.domain.account.model.*;
 import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
 import pl.easyprogramming.bank.domain.account.repository.entity.AccountEntity;
 import pl.easyprogramming.bank.domain.account.repository.entity.AddressEntity;
@@ -89,7 +86,7 @@ public class AccountControl implements AccountService {
     }
 
     @Override
-    public pl.easyprogramming.bank.domain.account.model.Account details(Long accountId) {
+    public Account details(Long accountId) {
 
         AccountEntity accountEntity = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity Not found"));

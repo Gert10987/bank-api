@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import pl.easyprogramming.bank.domain.common.model.Money;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Payment {
 
@@ -38,5 +39,30 @@ public class Payment {
     @JsonGetter
     public PaymantType type() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return Objects.equals(money, payment.money) &&
+                Objects.equals(registeredDateTime, payment.registeredDateTime) &&
+                type == payment.type;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(money, registeredDateTime, type);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("Payment{").
+                append("money=").append(money).
+                append(", registeredDateTime=").append(registeredDateTime).
+                append(", type=").append(type).
+                append('}').toString();
     }
 }

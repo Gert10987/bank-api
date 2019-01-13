@@ -6,6 +6,7 @@ import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.common.model.Name;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 public final class Account {
@@ -18,9 +19,9 @@ public final class Account {
 
     private Money totalMoney;
 
-    private Set<pl.easyprogramming.bank.domain.account.model.Payment> payments;
+    private Set<Payment> payments;
 
-    private Set<pl.easyprogramming.bank.domain.account.model.Address> addresses;
+    private Set<Address> addresses;
 
     private Account() {
     }
@@ -33,13 +34,13 @@ public final class Account {
     }
 
     @JsonGetter
-    public Set<pl.easyprogramming.bank.domain.account.model.Payment> payments() {
+    public Set<Payment> payments() {
         return payments;
     }
 
 
     @JsonGetter
-    public Set<pl.easyprogramming.bank.domain.account.model.Address> addresses() {
+    public Set<Address> addresses() {
         return addresses;
     }
 
@@ -64,11 +65,42 @@ public final class Account {
         return totalMoney;
     }
 
-    public void setAddresses(Set<pl.easyprogramming.bank.domain.account.model.Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 
-    public void setPayments(Set<pl.easyprogramming.bank.domain.account.model.Payment> payments) {
+    public void setPayments(Set<Payment> payments) {
         this.payments = payments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(accountNumber, account.accountNumber) &&
+                Objects.equals(registeredDateTime, account.registeredDateTime) &&
+                Objects.equals(name, account.name) &&
+                Objects.equals(totalMoney, account.totalMoney) &&
+                Objects.equals(payments, account.payments) &&
+                Objects.equals(addresses, account.addresses);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(accountNumber, registeredDateTime, name, totalMoney, payments, addresses);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("Account{").
+                append("accountNumber=").append(accountNumber).
+                append(", registeredDateTime=").append(registeredDateTime).
+                append(", name=").append(name).
+                append(", totalMoney=").append(totalMoney).
+                append(", payments=").append(payments).
+                append(", addresses=").append(addresses).
+                append('}').toString();
     }
 }
