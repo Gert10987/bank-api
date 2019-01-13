@@ -1,23 +1,30 @@
 package pl.easyprogramming.bank.domain.account.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import java.util.Objects;
 
 public final class AccountNumber {
 
     private String prefix;
-    private String accountNumberValue;
+    private String value;
+
+    private AccountNumber() {
+    }
 
     public AccountNumber(String generatedAccountNumber) {
         this.prefix = generatedAccountNumber.substring(0, 2);
-        this.accountNumberValue = generatedAccountNumber;
+        this.value = generatedAccountNumber;
     }
 
+    @JsonGetter
     public String prefix() {
         return prefix;
     }
 
-    public String accountNumber() {
-        return accountNumberValue;
+    @JsonGetter
+    public String number() {
+        return value;
     }
 
     @Override
@@ -26,20 +33,20 @@ public final class AccountNumber {
         if (o == null || getClass() != o.getClass()) return false;
         AccountNumber that = (AccountNumber) o;
         return Objects.equals(prefix, that.prefix) &&
-                Objects.equals(accountNumberValue, that.accountNumberValue);
+                Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(prefix, accountNumberValue);
+        return Objects.hash(prefix, value);
     }
 
     @Override
     public String toString() {
         return new StringBuilder("AccountNumber{").
                 append("prefix='").append(prefix).append('\'').
-                append(", accountNumberValue='").append(accountNumberValue).append('\'').
+                append(", value='").append(value).append('\'').
                 append('}').toString();
     }
 }

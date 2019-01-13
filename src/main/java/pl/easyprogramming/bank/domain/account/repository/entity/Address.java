@@ -22,4 +22,10 @@ public class Address {
         this.street = street;
     }
 
+    public pl.easyprogramming.bank.domain.account.model.Address createModel() {
+
+        pl.easyprogramming.bank.domain.account.model.Address res = new pl.easyprogramming.bank.domain.account.model.Address(this.city, this.street);
+
+        return res;
+    }
 }

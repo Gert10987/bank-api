@@ -52,4 +52,13 @@ public class Payment {
     public String currency() {
         return currency;
     }
+
+    public pl.easyprogramming.bank.domain.account.model.Payment createModel(){
+
+        Money money = new Money(amount, currency);
+
+        pl.easyprogramming.bank.domain.account.model.Payment res = new pl.easyprogramming.bank.domain.account.model.Payment(money, this.dateTime, this.paymantType);
+
+        return res;
+    }
 }

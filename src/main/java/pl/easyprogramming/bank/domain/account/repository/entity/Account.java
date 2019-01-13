@@ -3,6 +3,7 @@ package pl.easyprogramming.bank.domain.account.repository.entity;
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.PaymantType;
 import pl.easyprogramming.bank.domain.common.model.Money;
+import pl.easyprogramming.bank.domain.common.model.Name;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Account {
@@ -50,7 +52,7 @@ public class Account {
         this.defualtCurrency = registrationData.money().currency();
         this.totalMoney = registrationData.money().amount();
 
-        this.accountNumber = accountNumber.accountNumber();
+        this.accountNumber = accountNumber.number();
     }
 
     public Long id() {
@@ -94,5 +96,19 @@ public class Account {
 
     public Identity identity() {
         return identity;
+    }
+
+    public pl.easyprogramming.bank.domain.account.model.Account createModel(){
+
+        AccountNumber accountNumber = new AccountNumber(this.accountNumber);
+        Name name = new Name(this.identity.firstName(), this.identity.lastName());
+        Money money = new Money(this.totalMoney, this.defualtCurrency);
+
+        pl.easyprogramming.bank.domain.account.model.Account res = new pl.easyprogramming.bank.domain.account.model.Account(accountNumber, this.registeredDateTime, name, money);
+
+        res.setPayments(this.payments.stream().map(payment -> payment.createModel()).collect(Collectors.toSet()));
+        res.setAddresses(this.addresses.stream().map(address -> address.createModel()).collect(Collectors.toSet()));
+
+        return res;
     }
 }

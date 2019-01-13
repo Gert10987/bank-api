@@ -18,6 +18,7 @@ import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.jms.Queue;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 import java.math.BigDecimal;
 
@@ -52,13 +53,13 @@ public class AccountControl implements AccountService {
     public void transfer(AccountIdentity accountIdentity, AccountNumber otherAccountNumber, Money money) {
 
         Account account = findAccountById(accountIdentity.id());
-        Account destinationAccount = findAccountByAccountNumber(otherAccountNumber.accountNumber());
+        Account destinationAccount = findAccountByAccountNumber(otherAccountNumber.number());
 
         if (!account.isActive())
-            throw new ValidationException("Lack of account funds");
+            throw new IllegalStateException("Lack of account funds");
 
         if (account.totalMoney().compareTo(money.amount()) <= 0)
-            throw new ValidationException("Insufficient amount of funds on the account");
+             throw new IllegalStateException("Insufficient amount of funds on the account");
 
         account.addPayment(money, PaymantType.WITHDRAWALS);
         account.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(account.totalMoney(), money, account.defaultCurrency()));
@@ -80,11 +81,21 @@ public class AccountControl implements AccountService {
 
         account.withIdentity(identity);
         account.addAddress(address);
+        account.addPayment(registrationData.money(), PaymantType.DEPOSIT);
 
         accountRepository.save(account);
 
         //send to user queue to assign account id
         jmsTemplate.convertAndSend(userQueue, new AccountIdentity(account.id(), registrationData.email()));
+    }
+
+    @Override
+    public pl.easyprogramming.bank.domain.account.model.Account details(Long accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity Not found"));
+
+        return account.createModel();
     }
 
     private BigDecimal calculateNewTotalValueOfMoney(BigDecimal currentTotalValueOfMoney, Money transferAmountOfMoney, String defaultCurrency) {
