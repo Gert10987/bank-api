@@ -48,6 +48,9 @@ public class RequestFilter implements Filter {
 
         String authHeader = request.getHeader("authorization");
 
+        if(request.getMethod().equals("OPTIONS")){
+            return null;
+        }
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
             errorMessage = "Missing or invalid Authorization header";
         } else {
