@@ -11,15 +11,14 @@ import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.AccountService;
 import pl.easyprogramming.bank.domain.account.model.PaymantType;
 import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
-import pl.easyprogramming.bank.domain.account.repository.entity.Account;
-import pl.easyprogramming.bank.domain.account.repository.entity.Address;
-import pl.easyprogramming.bank.domain.account.repository.entity.Identity;
+import pl.easyprogramming.bank.domain.account.repository.entity.AccountEntity;
+import pl.easyprogramming.bank.domain.account.repository.entity.AddressEntity;
+import pl.easyprogramming.bank.domain.account.repository.entity.IdentityEntity;
 import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.jms.Queue;
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ValidationException;
 import java.math.BigDecimal;
 
 @Service
@@ -43,64 +42,64 @@ public class AccountControl implements AccountService {
     @Override
     public void charge(AccountIdentity accountIdentity, Money money) {
 
-        Account account = findAccountById(accountIdentity.id());
+        AccountEntity accountEntity = findAccountById(accountIdentity.id());
 
-        account.addPayment(money, PaymantType.DEPOSIT);
-        account.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(account.totalMoney(), money, account.defaultCurrency()));
+        accountEntity.addPayment(money, PaymantType.DEPOSIT);
+        accountEntity.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(accountEntity.totalMoney(), money, accountEntity.defaultCurrency()));
     }
 
     @Override
     public void transfer(AccountIdentity accountIdentity, AccountNumber otherAccountNumber, Money money) {
 
-        Account account = findAccountById(accountIdentity.id());
-        Account destinationAccount = findAccountByAccountNumber(otherAccountNumber.number());
+        AccountEntity accountEntity = findAccountById(accountIdentity.id());
+        AccountEntity destinationAccountEntity = findAccountByAccountNumber(otherAccountNumber.number());
 
-        if (!account.isActive())
+        if (!accountEntity.isActive())
             throw new IllegalStateException("Lack of account funds");
 
-        if (account.totalMoney().compareTo(money.amount()) <= 0)
-             throw new IllegalStateException("Insufficient amount of funds on the account");
+        if (accountEntity.totalMoney().compareTo(money.amount()) <= 0)
+             throw new IllegalStateException("Insufficient amount of funds on the accountEntity");
 
-        account.addPayment(money, PaymantType.WITHDRAWALS);
-        account.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(account.totalMoney(), money, account.defaultCurrency()));
+        accountEntity.addPayment(money, PaymantType.WITHDRAWALS);
+        accountEntity.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(accountEntity.totalMoney(), money, accountEntity.defaultCurrency()));
 
-        destinationAccount.addPayment(money, PaymantType.DEPOSIT);
-        destinationAccount.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(destinationAccount.totalMoney(), money, destinationAccount.defaultCurrency()));
+        destinationAccountEntity.addPayment(money, PaymantType.DEPOSIT);
+        destinationAccountEntity.updateTotalValueOfMoney(calculateNewTotalValueOfMoney(destinationAccountEntity.totalMoney(), money, destinationAccountEntity.defaultCurrency()));
     }
 
     @Override
     public void create(RegistrationData registrationData) {
 
         AccountNumber accountNumber = new AccountNumber(RandomStringUtils.random(26, false, true));
-        Account account = new Account(registrationData, accountNumber);
+        AccountEntity accountEntity = new AccountEntity(registrationData, accountNumber);
 
-        Identity identity = new Identity(registrationData.name().firstName(), registrationData.name().lastName(), registrationData.email().value());
+        IdentityEntity identityEntity = new IdentityEntity(registrationData.name().firstName(), registrationData.name().lastName(), registrationData.email().value());
 
         //TODO Add support for addresses
-        Address address = new Address("London", "One");
+        AddressEntity addressEntity = new AddressEntity("London", "One");
 
-        account.withIdentity(identity);
-        account.addAddress(address);
-        account.addPayment(registrationData.money(), PaymantType.DEPOSIT);
+        accountEntity.withIdentity(identityEntity);
+        accountEntity.addAddress(addressEntity);
+        accountEntity.addPayment(registrationData.money(), PaymantType.DEPOSIT);
 
-        accountRepository.save(account);
+        accountRepository.save(accountEntity);
 
-        //send to user queue to assign account id
-        jmsTemplate.convertAndSend(userQueue, new AccountIdentity(account.id(), registrationData.email()));
+        //send to user queue to assign accountEntity id
+        jmsTemplate.convertAndSend(userQueue, new AccountIdentity(accountEntity.id(), registrationData.email()));
     }
 
     @Override
     public pl.easyprogramming.bank.domain.account.model.Account details(Long accountId) {
 
-        Account account = accountRepository.findById(accountId)
+        AccountEntity accountEntity = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity Not found"));
 
-        return account.createModel();
+        return accountEntity.createModel();
     }
 
     private BigDecimal calculateNewTotalValueOfMoney(BigDecimal currentTotalValueOfMoney, Money transferAmountOfMoney, String defaultCurrency) {
 
-        Money newTotalMoneyValue = null;
+        Money newTotalMoneyValue;
 
         if (!transferAmountOfMoney.currency().equals(defaultCurrency)) {
 
@@ -124,13 +123,13 @@ public class AccountControl implements AccountService {
         return tranferMoney.amount();
     }
 
-    private Account findAccountById(Long id) {
+    private AccountEntity findAccountById(Long id) {
         return accountRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Account Not Found"));
+                .orElseThrow(() -> new IllegalStateException("AccountEntity Not Found"));
     }
 
-    private Account findAccountByAccountNumber(String accountNumber) {
+    private AccountEntity findAccountByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new IllegalStateException("Account Not Found"));
+                .orElseThrow(() -> new IllegalStateException("AccountEntity Not Found"));
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import pl.easyprogramming.bank.domain.TestData;
 import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
-import pl.easyprogramming.bank.domain.account.repository.entity.Account;
+import pl.easyprogramming.bank.domain.account.repository.entity.AccountEntity;
 import pl.easyprogramming.bank.domain.common.model.Email;
 import pl.easyprogramming.bank.domain.user.model.LoginData;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
@@ -117,10 +117,10 @@ public class BankApplicationTests {
 
         String jwtToken = loginUser(testData.getSecondUserLoginData());
 
-        Account account = accountRepository.findById(createdUser.accountId())
+        AccountEntity accountEntity = accountRepository.findById(createdUser.accountId())
                 .orElse(null);
 
-        BigDecimal totalValueOfMoneyBeforeCharge = account.totalMoney();
+        BigDecimal totalValueOfMoneyBeforeCharge = accountEntity.totalMoney();
 
         //when
         mvc.perform(put("/account/" + createdUser.accountId() + "/charge")
@@ -130,10 +130,10 @@ public class BankApplicationTests {
                 .andExpect(status().isOk());
 
         //then
-        account = accountRepository.findById(createdUser.accountId())
+        accountEntity = accountRepository.findById(createdUser.accountId())
                 .orElse(null);
 
-        assertEquals(totalValueOfMoneyBeforeCharge.add(testData.getSecondUserDepositPaymentData().amount()), account.totalMoney());
+        assertEquals(totalValueOfMoneyBeforeCharge.add(testData.getSecondUserDepositPaymentData().amount()), accountEntity.totalMoney());
     }
 
 
@@ -160,10 +160,10 @@ public class BankApplicationTests {
         User secondUser = userRepository.findByEmail(secondUserRegistrationData.email().value());
 
         String secondUserAccountNumber = accountRepository.findAccountNumberById(secondUser.accountId());
-        Account secondUserAccount = accountRepository.findByAccountNumber(secondUserAccountNumber)
+        AccountEntity secondUserAccountEntity = accountRepository.findByAccountNumber(secondUserAccountNumber)
                 .orElse(null);
 
-        BigDecimal totalValueOfMoneyBeforeTransfer = secondUserAccount.totalMoney();
+        BigDecimal totalValueOfMoneyBeforeTransfer = secondUserAccountEntity.totalMoney();
 
         //when
         mvc.perform(put("/account/" + firstUser.accountId() + "/transfer/" + secondUserAccountNumber + "/charge")
@@ -173,10 +173,10 @@ public class BankApplicationTests {
                 .andExpect(status().isOk());
 
         //then
-        secondUserAccount = accountRepository.findByAccountNumber(secondUserAccountNumber)
+        secondUserAccountEntity = accountRepository.findByAccountNumber(secondUserAccountNumber)
                 .orElse(null);
 
-        assertEquals(totalValueOfMoneyBeforeTransfer.add(testData.getFirstUserTransfertPaymentData().amount()), secondUserAccount.totalMoney());
+        assertEquals(totalValueOfMoneyBeforeTransfer.add(testData.getFirstUserTransfertPaymentData().amount()), secondUserAccountEntity.totalMoney());
     }
 
 
@@ -202,10 +202,10 @@ public class BankApplicationTests {
                 .andExpect(status().isOk());
 
         //then
-        Account account = accountRepository.findById(createdUser.accountId())
+        AccountEntity accountEntity = accountRepository.findById(createdUser.accountId())
                 .orElse(null);
 
-        assertTrue(account.payments().stream()
+        assertTrue(accountEntity.payments().stream()
                 .anyMatch(payment ->
                         payment.amount().compareTo(testData.getSecondUserDepositPaymentData().amount()) == 0));
     }

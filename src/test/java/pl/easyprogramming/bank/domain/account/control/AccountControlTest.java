@@ -11,14 +11,13 @@ import pl.easyprogramming.bank.domain.TestData;
 import pl.easyprogramming.bank.domain.account.model.AccountIdentity;
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.repository.AccountRepository;
-import pl.easyprogramming.bank.domain.account.repository.entity.Account;
+import pl.easyprogramming.bank.domain.account.repository.entity.AccountEntity;
 import pl.easyprogramming.bank.domain.common.model.Money;
 import pl.easyprogramming.bank.domain.user.model.RegisterDate;
 import pl.easyprogramming.bank.domain.user.model.RegistrationData;
 
 import javax.jms.Destination;
 import javax.jms.Queue;
-import javax.validation.ValidationException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class AccountControlTest {
     private Queue accountQueue;
 
     @Mock
-    private Account mockAccount;
+    private AccountEntity mockAccountEntity;
 
     private TestData testData = new TestData();
 
@@ -57,11 +56,11 @@ public class AccountControlTest {
         RegistrationData registrationData = testData.getFirstUserRegistrationData();
         registrationData.setRegisteredDate(new RegisterDate(LocalDateTime.now()));
 
-        List<Account> accounts = new ArrayList<>();
+        List<AccountEntity> accountEntities = new ArrayList<>();
 
-        doAnswer((Answer) invocation -> {
-            Account createdAccount = (Account) invocation.getArgument(0);
-            accounts.add(createdAccount);
+        doAnswer(invocation -> {
+            AccountEntity createdAccountEntity = invocation.getArgument(0);
+            accountEntities.add(createdAccountEntity);
 
             return null;
         }).when(accountRepository).save(any());
@@ -70,13 +69,13 @@ public class AccountControlTest {
         accountControl.create(registrationData);
 
         //then
-        Account persistedAccount = accounts.get(0);
+        AccountEntity persistedAccountEntity = accountEntities.get(0);
 
-        assertEquals(persistedAccount.totalMoney(), registrationData.money().amount());
-        assertEquals(persistedAccount.defaultCurrency(), registrationData.money().currency());
+        assertEquals(persistedAccountEntity.totalMoney(), registrationData.money().amount());
+        assertEquals(persistedAccountEntity.defaultCurrency(), registrationData.money().currency());
 
-        assertEquals(persistedAccount.identity().firstName(), registrationData.name().firstName());
-        assertEquals(persistedAccount.identity().lastName(), registrationData.name().lastName());
+        assertEquals(persistedAccountEntity.identity().firstName(), registrationData.name().firstName());
+        assertEquals(persistedAccountEntity.identity().lastName(), registrationData.name().lastName());
     }
 
     @Test
@@ -88,8 +87,8 @@ public class AccountControlTest {
 
         List<AccountIdentity> accountIdentities = new ArrayList<>();
 
-        doAnswer((Answer) invocation -> {
-            AccountIdentity createdAccount = (AccountIdentity) invocation.getArgument(1);
+        doAnswer(invocation -> {
+            AccountIdentity createdAccount = invocation.getArgument(1);
             accountIdentities.add(createdAccount);
 
             return null;
@@ -115,18 +114,18 @@ public class AccountControlTest {
         Money money = new Money(testData.getFirstUserTransfertPaymentData().amount(), testData.getFirstUserTransfertPaymentData().currency());
         AccountNumber otherAccountNumber = new AccountNumber("12345");
 
-        when(mockAccount.isActive()).thenReturn(false);
+        when(mockAccountEntity.isActive()).thenReturn(false);
 
         when(accountRepository.findById(any()))
-                .thenReturn(java.util.Optional.ofNullable(mockAccount));
+                .thenReturn(java.util.Optional.ofNullable(mockAccountEntity));
 
         when(accountRepository.findByAccountNumber(any()))
-                .thenReturn(java.util.Optional.of(new Account(registrationData, new AccountNumber("898989"))));
+                .thenReturn(java.util.Optional.of(new AccountEntity(registrationData, new AccountNumber("898989"))));
 
         //when
         try {
             accountControl.transfer(accountIdentity, otherAccountNumber, money);
-        } catch (ValidationException e) {
+        } catch (IllegalStateException e) {
             assertTrue(e.getMessage().contains("Lack of account funds"));
         }
     }
@@ -142,20 +141,20 @@ public class AccountControlTest {
         Money money = new Money(testData.getFirstUserTransfertPaymentData().amount(), testData.getFirstUserTransfertPaymentData().currency());
         AccountNumber otherAccountNumber = new AccountNumber("12345");
 
-        when(mockAccount.isActive()).thenReturn(true);
+        when(mockAccountEntity.isActive()).thenReturn(true);
 
-        when(mockAccount.totalMoney()).thenReturn(money.amount().subtract(new BigDecimal("1.00")));
+        when(mockAccountEntity.totalMoney()).thenReturn(money.amount().subtract(new BigDecimal("1.00")));
 
         when(accountRepository.findById(any()))
-                .thenReturn(java.util.Optional.ofNullable(mockAccount));
+                .thenReturn(java.util.Optional.ofNullable(mockAccountEntity));
 
         when(accountRepository.findByAccountNumber(any()))
-                .thenReturn(java.util.Optional.of(new Account(registrationData, new AccountNumber("898989"))));
+                .thenReturn(java.util.Optional.of(new AccountEntity(registrationData, new AccountNumber("898989"))));
 
         //when
         try {
             accountControl.transfer(accountIdentity, otherAccountNumber, money);
-        } catch (ValidationException e) {
+        } catch (IllegalStateException e) {
             assertTrue(e.getMessage().contains("Insufficient amount of funds on the account"));
         }
     }

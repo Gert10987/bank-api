@@ -51,7 +51,7 @@ public class LoginControl implements LoginService {
         }
 
         if (!user.isActive()) {
-            throw new AuthorizationServiceException("Account is not active, please contact with support.");
+            throw new AuthorizationServiceException("AccountEntity is not active, please contact with support.");
         }
 
         Date currentDate = new Date();

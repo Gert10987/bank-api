@@ -1,6 +1,7 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
 import pl.easyprogramming.bank.domain.account.model.PaymantType;
+import pl.easyprogramming.bank.domain.account.model.Payment;
 import pl.easyprogramming.bank.domain.account.repository.converter.PaymantStatusConverter;
 import pl.easyprogramming.bank.domain.common.model.Money;
 
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-public class Payment {
+public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +29,10 @@ public class Payment {
     @Column
     private LocalDateTime dateTime;
 
-    private Payment() {
+    private PaymentEntity() {
     }
 
-    public Payment(Money money, PaymantType paymantType) {
+    public PaymentEntity(Money money, PaymantType paymantType) {
 
         this.paymantType = paymantType;
 
@@ -53,11 +54,11 @@ public class Payment {
         return currency;
     }
 
-    public pl.easyprogramming.bank.domain.account.model.Payment createModel(){
+    public Payment createModel(){
 
         Money money = new Money(amount, currency);
 
-        pl.easyprogramming.bank.domain.account.model.Payment res = new pl.easyprogramming.bank.domain.account.model.Payment(money, this.dateTime, this.paymantType);
+        Payment res = new Payment(money, this.dateTime, this.paymantType);
 
         return res;
     }

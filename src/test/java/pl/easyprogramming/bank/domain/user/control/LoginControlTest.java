@@ -53,7 +53,7 @@ public class LoginControlTest {
         try {
             loginService.login(loginData.email(), loginData.password());
         } catch (AuthorizationServiceException e) {
-            assertTrue(e.getMessage().contains("Account is not active, please contact with support."));
+            assertTrue(e.getMessage().contains("AccountEntity is not active, please contact with support."));
         }
     }
 

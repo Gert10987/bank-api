@@ -1,9 +1,11 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
+import pl.easyprogramming.bank.domain.account.model.Address;
+
 import javax.persistence.*;
 
 @Entity
-public class Address {
+public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,17 +16,17 @@ public class Address {
 
     private String street;
 
-    private Address() {
+    private AddressEntity() {
     }
 
-    public Address(String city, String street) {
+    public AddressEntity(String city, String street) {
         this.city = city;
         this.street = street;
     }
 
-    public pl.easyprogramming.bank.domain.account.model.Address createModel() {
+    public Address createModel() {
 
-        pl.easyprogramming.bank.domain.account.model.Address res = new pl.easyprogramming.bank.domain.account.model.Address(this.city, this.street);
+        Address res = new Address(this.city, this.street);
 
         return res;
     }

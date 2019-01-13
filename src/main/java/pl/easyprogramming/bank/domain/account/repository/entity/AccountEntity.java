@@ -1,5 +1,6 @@
 package pl.easyprogramming.bank.domain.account.repository.entity;
 
+import pl.easyprogramming.bank.domain.account.model.Account;
 import pl.easyprogramming.bank.domain.account.model.AccountNumber;
 import pl.easyprogramming.bank.domain.account.model.PaymantType;
 import pl.easyprogramming.bank.domain.common.model.Money;
@@ -14,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-public class Account {
+public class AccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,20 +34,20 @@ public class Account {
     private BigDecimal totalMoney;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Identity identity;
+    private IdentityEntity identityEntity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
-    private Set<Payment> payments = new HashSet<>();
+    private Set<PaymentEntity> paymentEntities = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
-    private Set<Address> addresses = new HashSet<>();
+    private Set<AddressEntity> addressEntities = new HashSet<>();
 
-    private Account() {
+    private AccountEntity() {
     }
 
-    public Account(RegistrationData registrationData, AccountNumber accountNumber) {
+    public AccountEntity(RegistrationData registrationData, AccountNumber accountNumber) {
 
         this.registeredDateTime = registrationData.registeredDate().registeredAt();
         this.defualtCurrency = registrationData.money().currency();
@@ -67,12 +68,12 @@ public class Account {
         this.totalMoney = totalMoney;
     }
 
-    public void withIdentity(Identity identity) {
-        this.identity = identity;
+    public void withIdentity(IdentityEntity identityEntity) {
+        this.identityEntity = identityEntity;
     }
 
-    public void addAddress(Address address) {
-        this.addresses.add(address);
+    public void addAddress(AddressEntity addressEntity) {
+        this.addressEntities.add(addressEntity);
     }
 
     public boolean isActive() {
@@ -85,29 +86,29 @@ public class Account {
 
     public void addPayment(Money money, PaymantType type) {
 
-        Payment paymentEntity = new Payment(money, type);
+        PaymentEntity paymentEntityEntity = new PaymentEntity(money, type);
 
-        payments.add(paymentEntity);
+        paymentEntities.add(paymentEntityEntity);
     }
 
-    public Set<Payment> payments() {
-        return payments;
+    public Set<PaymentEntity> payments() {
+        return paymentEntities;
     }
 
-    public Identity identity() {
-        return identity;
+    public IdentityEntity identity() {
+        return identityEntity;
     }
 
-    public pl.easyprogramming.bank.domain.account.model.Account createModel(){
+    public Account createModel(){
 
         AccountNumber accountNumber = new AccountNumber(this.accountNumber);
-        Name name = new Name(this.identity.firstName(), this.identity.lastName());
+        Name name = new Name(this.identityEntity.firstName(), this.identityEntity.lastName());
         Money money = new Money(this.totalMoney, this.defualtCurrency);
 
-        pl.easyprogramming.bank.domain.account.model.Account res = new pl.easyprogramming.bank.domain.account.model.Account(accountNumber, this.registeredDateTime, name, money);
+        Account res = new Account(accountNumber, this.registeredDateTime, name, money);
 
-        res.setPayments(this.payments.stream().map(payment -> payment.createModel()).collect(Collectors.toSet()));
-        res.setAddresses(this.addresses.stream().map(address -> address.createModel()).collect(Collectors.toSet()));
+        res.setPayments(this.paymentEntities.stream().map(PaymentEntity::createModel).collect(Collectors.toSet()));
+        res.setAddresses(this.addressEntities.stream().map(AddressEntity::createModel).collect(Collectors.toSet()));
 
         return res;
     }

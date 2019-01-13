@@ -3,7 +3,7 @@ package pl.easyprogramming.bank.domain.account.repository.entity;
 import javax.persistence.*;
 
 @Entity
-public class Identity {
+public class IdentityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +18,10 @@ public class Identity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    private Identity() {
+    private IdentityEntity() {
     }
 
-    public Identity(String firstName, String lastName, String email) {
+    public IdentityEntity(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
