@@ -13,7 +13,7 @@ public final class Password {
     }
 
     public Password(String value) {
-        setPassword(value);
+        setValue(value);
     }
 
     @JsonGetter
@@ -21,7 +21,7 @@ public final class Password {
         return value;
     }
 
-    private void setPassword(String value) {
+    private void setValue(String value) {
 
         if (value == null)
             throw new ValidationException("Password is null");
