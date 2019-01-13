@@ -27,7 +27,7 @@ public class AccountResource {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "{accountId}/transfer/{accountNumber}/charge")
+    @RequestMapping(method = RequestMethod.PUT, value = "{accountId}/transfer/{accountNumber}")
     public ResponseEntity transferMoneyToAnotherAccount(@PathVariable(value = "accountId") Long accountId,
                                                         @PathVariable(value = "accountNumber") String accountNumber,
                                                         @RequestBody Money money) {
