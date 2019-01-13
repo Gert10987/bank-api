@@ -30,7 +30,7 @@ public class UserResource {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "login")
+    @RequestMapping(method = RequestMethod.POST, value = "login", produces = "text/plain")
     public ResponseEntity login(@RequestBody LoginData loginData) {
 
         String jwtToken = loginService.login(loginData.email(), loginData.password());
